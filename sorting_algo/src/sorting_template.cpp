@@ -73,19 +73,6 @@ static void writeSortedList(const vector<int> &sortedList)
     }
 }
 
-/**
- * @brief Print the content of a vector
- * 
- * @param list vector to print
- */
-void printList(const vector<int> &list)
-{
-    for (const auto &i : list)
-    {
-        cout << i << endl;
-    }
-}
-
 int main(int argc, char *argv[])
 {
     string inputFilePath = parseArguments(argc, argv);

@@ -7,9 +7,9 @@
 
 using namespace std;
 
-int getNthDigit(const int num, const int n)
+static int getNthDigit(const int num, const int n)
 {
-    return (int)(num / pow(10, n)) % 10;
+    return static_cast<int>(num / pow(10, n)) % 10;
 }
 
 static void sort(vector<int> &listToSort)
@@ -22,7 +22,7 @@ static void sort(vector<int> &listToSort)
         buckets[digit].push_back(num);
     }
 
-    for (int i = 1; i < (int)log10(listToSort.size()); ++i)
+    for (int i = 1; i < static_cast<int>(log10(listToSort.size())); ++i)
     {
         map<int, vector<int>> newBuckets;
 
@@ -108,19 +108,6 @@ static void writeSortedList(const vector<int> &sortedList)
         }
 
         outputFile.close();
-    }
-}
-
-/**
- * @brief Print the content of a vector
- * 
- * @param list vector to print
- */
-void printList(const vector<int> &list)
-{
-    for (const auto &i : list)
-    {
-        cout << i << endl;
     }
 }
 
