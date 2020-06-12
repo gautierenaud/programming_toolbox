@@ -2,12 +2,50 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <cmath>
+#include <map>
 
 using namespace std;
 
+int getNthDigit(const int num, const int n)
+{
+    return (int)(num / pow(10, n)) % 10;
+}
+
 static void sort(vector<int> &listToSort)
 {
-    // do your thing
+    map<int, vector<int>> buckets;
+
+    for (const auto &num : listToSort)
+    {
+        int digit = getNthDigit(num, 0);
+        buckets[digit].push_back(num);
+    }
+
+    for (int i = 1; i < (int)log10(listToSort.size()); ++i)
+    {
+        map<int, vector<int>> newBuckets;
+
+        for (const auto &[digit, nums] : buckets)
+        {
+            for (const auto &num : nums)
+            {
+                int newDigit = getNthDigit(num, i);
+                newBuckets[newDigit].push_back(num);
+            }
+        }
+
+        buckets = newBuckets;
+    }
+
+    vector<int> result;
+    for (const auto &[digit, nums] : buckets)
+    {
+        result.reserve(result.size() + distance(nums.begin(), nums.end()));
+        result.insert(result.end(), nums.begin(), nums.end());
+    }
+
+    listToSort = result;
 }
 
 /**
