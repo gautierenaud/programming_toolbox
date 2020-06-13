@@ -17,10 +17,8 @@ static int getMax(const vector<int> &vect)
     return *max_element(begin(vect), end(vect));
 }
 
-static void countSort(vector<int> &vect, const int &nthDigit)
+static void countSort(vector<int> &vect, const int &nthDigit, vector<int> &buffer)
 {
-
-    vector<int> output(vect.size(), 0);
     int count[10]{0};
 
     for (const auto &num : vect)
@@ -36,20 +34,22 @@ static void countSort(vector<int> &vect, const int &nthDigit)
     for (auto it = vect.rbegin(); it != vect.rend(); ++it)
     {
         int newIndex = (*it / nthDigit) % 10;
-        output[count[newIndex] - 1] = *it;
+        buffer[count[newIndex] - 1] = *it;
         count[newIndex]--;
     }
 
-    vect = output;
+    vect.swap(buffer);
 }
 
 static void sort(vector<int> &listToSort)
 {
     int maxNumber = getMax(listToSort);
 
+    vector<int> buffer(listToSort.size(), 0);
+
     for (int nthDigit = 1; maxNumber / nthDigit > 0; nthDigit *= 10)
     {
-        countSort(listToSort, nthDigit);
+        countSort(listToSort, nthDigit, buffer);
     }
 }
 
@@ -107,9 +107,25 @@ static void writeSortedList(const vector<int> &sortedList)
     ofstream outputFile("out.txt");
     if (outputFile.is_open())
     {
+        uint bufferLimit = 1000000;
+        string buffer;
+        buffer.reserve(bufferLimit);
+
         for (const auto &num : sortedList)
         {
-            outputFile << num << endl;
+            if (buffer.length() + sizeof(num) + 1 >= bufferLimit)
+            {
+                outputFile << buffer;
+                buffer.resize(0);
+            }
+
+            buffer.append(to_string(num));
+            buffer.append(1, '\n');
+        }
+
+        if (buffer.length() > 0)
+        {
+            outputFile << buffer;
         }
 
         outputFile.close();

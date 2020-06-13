@@ -64,9 +64,25 @@ static void writeSortedList(const vector<int> &sortedList)
     ofstream outputFile("out.txt");
     if (outputFile.is_open())
     {
+        uint bufferLimit = 1000000;
+        string buffer;
+        buffer.reserve(bufferLimit);
+
         for (const auto &num : sortedList)
         {
-            outputFile << num << endl;
+            if (buffer.length() + sizeof(num) + 1 >= bufferLimit)
+            {
+                outputFile << buffer;
+                buffer.resize(0);
+            }
+
+            buffer.append(to_string(num));
+            buffer.append(1, '\n');
+        }
+
+        if (buffer.length() > 0)
+        {
+            outputFile << buffer;
         }
 
         outputFile.close();

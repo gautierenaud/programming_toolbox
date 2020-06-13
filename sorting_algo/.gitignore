@@ -36,4 +36,4 @@ obj/
 out/
 
 # input files
-inputs/*.txt
+*.txt
