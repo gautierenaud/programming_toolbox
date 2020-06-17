@@ -1,5 +1,5 @@
 CXX=g++
-CXX_FLAGS=-c -Wall --std=c++17
+CXX_FLAGS=-c -Wall --std=c++2a -g
 SRC_PATH=./src
 OBJ_PATH=./obj
 OUT_PATH=./out
