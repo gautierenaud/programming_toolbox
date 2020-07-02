@@ -1,6 +1,6 @@
 CXX=g++
-OPT_FLAG=
-CXX_FLAGS=-c -Wall --std=c++2a -g ${OPT_FLAG}
+OPT_FLAG=-g
+CXX_FLAGS=-c -Wall --std=c++2a ${OPT_FLAG}
 SRC_PATH=./src
 OBJ_PATH=./obj
 OUT_PATH=./out
@@ -24,6 +24,10 @@ $(OBJ_PATH):
 
 $(OUT_PATH):
 	@mkdir -p $(OUT_PATH)
+
+.PHONY: O3
+O3: OPT_FLAG=-O3
+O3: all
 
 .PHONY: clean
 clean:

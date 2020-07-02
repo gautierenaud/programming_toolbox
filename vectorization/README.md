@@ -1,5 +1,7 @@
 # Vectorization
 
+To put it simply (for me), instead of doing operations one word at a time, we stuff several words in a big one (e.g. a 128 bits register) and do the operation for the whole big word once.
+
 Useful tools:
 * `objdump -d *executable*`: show the assembly code
 * [Compiler Explorer](https://godbolt.org/): shows how the code would be compiled with different compilers, and displays help about generated assembly.
@@ -78,3 +80,41 @@ Coming to the time difference, for 10000000 element addition:
 * `make -B OPT_FLAG='-O2'`: `Elapsed time: 0.0152085 s for addition`
 * `make -B OPT_FLAG='-O3'`: `Elapsed time: 0.0137107 s for addition` -> vectorization *should* only appear starting from here,
 so the enhancement due to vectorization seems to be ~0.002s faster code **at most** (there are potentially other optimizations).
+
+# dependent_loop
+
+To see how the compiler (g++) will behave when using values from different part of a vector.
+
+## addToPreviousVectorizable
+
+Translates to:
+```asm
+1390:	f3 0f 6f 08          	movdqu (%rax),%xmm1
+1394:	f3 0f 6f 50 14       	movdqu 0x14(%rax),%xmm2
+1399:	48 83 c0 10          	add    $0x10,%rax
+139d:	66 0f fe c1          	paddd  %xmm1,%xmm0
+13a1:	66 0f fe c2          	paddd  %xmm2,%xmm0
+13a5:	0f 11 40 04          	movups %xmm0,0x4(%rax)
+```
+We can see the `add` instruction increments the index by 16 (0x10).
+
+## addToPreviousUnvectorizable
+
+The compiler seems to detect collision, so no vectorization.
+
+## addToPreviousUnvectorizableSmall
+
+No vectorization, since the directly looking-back range make it impossible to vectorize.
+
+## addToPreviousVectorizableSmall
+
+My g++ (9.3.0) does not seem to do any vectorization, while the one on [Compiler Explorer](https://godbolt.org/) (10.1) seems to do one.
+The vectorized assembly is:
+```asm
+movq    xmm1, QWORD PTR [rax]
+movq    xmm0, QWORD PTR [rax-12]
+add     rax, 8
+paddd   xmm0, xmm1
+movq    QWORD PTR [rax-8], xmm0
+```
+As we can see, the index (*rax*) is incremented by 8, which corresponds to 2 values (I guess), which is exactly the range unaffected by my looking-back index (`a[i - 3]`).
