@@ -36,5 +36,7 @@ obj/
 out/
 
 # input files
-inputs/*/
-!inputs/*.py
+inputs/*.txt
+
+# generated files
+outputs/
