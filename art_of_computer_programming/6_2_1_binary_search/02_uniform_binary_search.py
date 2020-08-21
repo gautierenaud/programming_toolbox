@@ -28,7 +28,7 @@ def search(number, sorted_list):
             if m[-1] == 0:
                 break
 
-    i = m[0]
+    i = m[0] - 1
     j = 1
     while m[j] != 0:
         if number < sorted_list[i]:
