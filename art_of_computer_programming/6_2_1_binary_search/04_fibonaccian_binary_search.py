@@ -13,18 +13,24 @@ def parse_args():
     args = parser.parse_args()
     return args.size, args.number, args.time
 
+init = None
 def search(number, sorted_list):
     n = len(sorted_list)
-    
-    p = 0
-    q = 1
-    i = p + q
-    m = -1
-    while m < 0:
-        p, q = p+q, p
+
+    global init
+    if not init:
+        p = 0
+        q = 1
         i = p + q
-        m = i - n
-    i, p, q = p, q, p - q
+        m = -1
+        while m < 0:
+            p, q = p+q, p
+            i = p + q
+            m = i - n
+        i, p, q = p, q, p - q
+        init = i, p ,q, m
+    else:
+        i, p, q, m = init
 
     if number > sorted_list[i]:
         i -= m
@@ -51,9 +57,10 @@ def main():
     size, number,time = parse_args()
     sorted_list = generate_sorted_input(size)
     
+    import profile
     start = datetime.datetime.now()
     for i in range(time):
-        is_found, index = search(number, sorted_list)
+         is_found, index = search(number, sorted_list)
     end = datetime.datetime.now()
     elapsed = end - start
     print(f'Elapsed time: {elapsed}')
