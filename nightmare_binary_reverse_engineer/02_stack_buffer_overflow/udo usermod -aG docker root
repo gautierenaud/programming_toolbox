@@ -1,0 +1,21 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Wed 2021-01-27 23:43:09 CET; 19s ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 28987 (dockerd)
+      Tasks: 21
+     Memory: 47.1M
+     CGroup: /system.slice/docker.service
+             └─28987 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.726323533+01:00" level=warning msg="Your kernel does not support CPU realtime scheduler"
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.726346747+01:00" level=warning msg="Your kernel does not support cgroup blkio weight"
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.726352998+01:00" level=warning msg="Your kernel does not support cgroup blkio weight_device"
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.726467572+01:00" level=info msg="Loading containers: start."
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.857179227+01:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used to set a preferred IP address"
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.903162926+01:00" level=info msg="Loading containers: done."
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.940341015+01:00" level=info msg="Docker daemon" commit=8891c58 graphdriver(s)=overlay2 version=20.10.2
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.940510862+01:00" level=info msg="Daemon has completed initialization"
+janv. 27 23:43:09 renaud-desktop systemd[1]: Started Docker Application Container Engine.
+janv. 27 23:43:09 renaud-desktop dockerd[28987]: time="2021-01-27T23:43:09.966328239+01:00" level=info msg="API listen on /run/docker.sock"
