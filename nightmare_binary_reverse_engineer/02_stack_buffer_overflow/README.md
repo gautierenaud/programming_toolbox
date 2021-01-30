@@ -29,4 +29,16 @@
     => 0x28 zeros and address of shell method: 0x004005b6
 
     but sigsev because wrong env :/ -> docker file with socat to emulate the env, thanks to the example in the link :D
-    
+
+* [vuln-chat](https://github.com/j3rrry/Writeups/blob/master/CTF/2017/TU/Pwn/vuln%20chat/vuln-chat)
+    32 bits
+    little endian
+
+    `printFlag` at 0x0804856b
+    username at 0xffffce9f (?)
+    format is %30s at 0xffffceb3-> so only 30 chars are read
+    password stored at 0xffffce8b
+    return pointer at 0xffffcebc
+        -> delta is 49
+    first overflow to overwrite fmt to have more reach
+    - format - username: 20 delta
