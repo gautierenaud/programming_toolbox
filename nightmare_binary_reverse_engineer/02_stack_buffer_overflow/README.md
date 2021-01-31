@@ -21,7 +21,7 @@
 
     on stopping on a breakpoint: search the input (ddd) in the memory `search-pattern ddd` and note the stack address. Then look for the return register rip `i f`. Substract both (make 0x48 in this case). `x 0x7fffffffdd08` to check the value of the return register (in this particular case).
 
-* [getit](https://github.com/osirislab/CSAW-CTF-2018-Quals/tree/master/pwn/get_it%3F)
+* [getit](https://github.com/osirislab/CSAW-CTF-2018-Quals/tree/master/pwn/get_it)
     64bit
     stack addr of buffer: 0x7fffffffdc90
     return register: 0x7fffffffdce8
@@ -30,7 +30,7 @@
 
     but sigsev because wrong env :/ -> docker file with socat to emulate the env, thanks to the example in the link :D
 
-* [vuln-chat](https://github.com/j3rrry/Writeups/blob/master/CTF/2017/TU/Pwn/vuln%20chat/vuln-chat)
+* [vuln-chat](https://github.com/j3rrry/Writeups/tree/master/CTF/2017/TU/Pwn/vuln%20chat)
     32 bits
     little endian
 
@@ -42,3 +42,30 @@
         -> delta is 49
     first overflow to overwrite fmt to have more reach
     - format - username: 20 delta
+
+* [pilot](https://github.com/osirislab/CSAW-CTF-2017-Quals/tree/master/pwn/pilot)
+    64bits
+    First instance of **shellcode** exploit: we change the return address to a method we crafted.
+    shellcodes can be found [here](http://shell-storm.org/shellcode/).
+
+    (the memory addresses are supposed to change everytime):
+    commandBuffer: 0x7fffffffdcc0
+    rip: 0x7fffffffdce8
+    => 40 of delta
+
+* [pwn3](https://github.com/zst-ctf/tamuctf-2019-writeups/tree/master/Solved/Pwn3)
+    32bit
+    PIE and RELRO enabled (randomized memory offset)
+    useful gef command: `disas echo`
+
+    buffer location: 0xffffcd9e
+    eip: 0xffffcecc
+    => 302 of delta
+
+
+
+# Notes
+
+How to circumvent [ASLR/PIE protection](https://guyinatuxedo.github.io/5.1-mitigation_aslr_pie/index.html). The relative layout of the memory is the same (`vmmap` in gdb) even if there is a random offset. So we try to leak one address of a memory region to deduce the layout of this region (not the others).
+
+gdb (or gef) can put a breakpoint even with pie enabled (in gef: `pie b *addr`).
