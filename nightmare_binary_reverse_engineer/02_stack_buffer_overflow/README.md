@@ -62,10 +62,71 @@
     eip: 0xffffcecc
     => 302 of delta
 
+* [shella-easy](https://tcode2k16.github.io/blog/posts/2018/tuctf-writeup/#shella-easy)
+    32bits
+    partial RELRO
 
+    Seems like shellcode insertion, make sure to overwrite one variable with the right value.
+    buffer: 0xffffce60
+    eip: 0xffffceac
+    -> delta 76
+    value to overwrite: 0xffffcea0 (delta 64 from the buffer)
+
+* [simplecalc](https://github.com/ctfs/write-ups-2016/tree/master/boston-key-party-2016/pwn/simple-calc-5)
+    64 bits
+    partial RELRO and NX
+
+    buffer: 0x7fffffffdc90
+    rip: 0x7fffffffdcd8
+    => 72 of delta
+
+    ROP exploit, need 4 registers to call sys_execve: rax (val 59, i.e. 0x3b), rdi (file to execute : ptr to "/bin/sh"), rsi (args, not needed: 0x0) and rdx (env vars, not needed: 0x0).
+    To look for them search with:
+    `ROPgadget --binary simplecalc | grep "pop rax ; ret"`
+    (replace rax with the others)
+    rax: 0x000000000044db34
+    rdi: 0x0000000000401b73
+    rsi: 0x0000000000401c87
+    rdx: 0x0000000000437a85
+
+    Then look for a `mov` gadget that will allow me (you ? us ?) to write onto those values: `ROPgadget --binary simplecalc | grep "mov"`:
+    ```
+    0x000000000044526e : mov qword ptr [rax], rdx ; ret
+    ```
+
+    Last gadget needed for syscall (`ROPgadget --binary simplecalc | grep ": syscall"`):
+    ```
+    0x0000000000400488 : syscall
+    ```
+
+    Now look for a place to write "/bin/sh" (`vmmap`): ~ 0x6c1000
+
+    There is a `free` on the way to the overwrite but we can give it a null pointer.
 
 # Notes
+
+## Defence
+
+### ASLR/PIE
+
+Add a randomized offset at the beginning of memory regions.
 
 How to circumvent [ASLR/PIE protection](https://guyinatuxedo.github.io/5.1-mitigation_aslr_pie/index.html). The relative layout of the memory is the same (`vmmap` in gdb) even if there is a random offset. So we try to leak one address of a memory region to deduce the layout of this region (not the others).
 
 gdb (or gef) can put a breakpoint even with pie enabled (in gef: `pie b *addr`).
+
+### nx
+
+Non-Executable stack. Remove 'x' right from the stack (so no code execution from here).
+
+Look for other writable region in memory for exploits.
+
+To test the security, try in gef `j *addr` to just jump to that address. If it is at the stack and it is protected, you'll got a sigsev.
+
+## Attack
+
+### ROP
+
+[Return-Oriented Programming](https://fr.wikipedia.org/wiki/Return-oriented_programming).
+Exploit to bypass non-executable memory defence, by using "gadgets" (small executable memories).
+Tool: https://github.com/JonathanSalwan/ROPgadget (installed with pwn tools ?)
