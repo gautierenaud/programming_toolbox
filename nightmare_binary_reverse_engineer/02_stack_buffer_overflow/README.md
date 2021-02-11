@@ -123,6 +123,38 @@
 
     note to self: `/bin/bash` **does not work** (at least for this one)
 
+* feedme
+    32bit LSB
+    Intel 80386
+    NX enabled
+
+    The program forks a child process, so use this option in gdb to follow it:
+    `set follow-fork-mode child` and `show follow-fork mode` to check
+
+    `p $al` to print low bits of rax register (?)
+
+    `si` (step into) or `ni` (next instruction) for gdb
+
+    Canary at the method (at 0x08049036) that reads input (and displays "FEED ME!").
+    e.g. : for one run -> `0xb2ef800` (x86's canary's are 4 bytes, last one being 00).
+    It is at `0xffffce8c`.
+
+    From looking at the parameter in the call to input scan, stack seems to be at `0xffffce6c` and eip `0xffffce9c` when break point at `b *0x8049069`.
+
+    stack - eip delta : 0x30
+    canary - eip delta : 0x10 (! in tutorial it is 0x20, and indeed it worked with 0x20)
+
+    The fork is created 800 time before exiting, which are the number of time we can brute force the canary.
+
+    Naming conventions are **different** from previous one. (eax)
+    eax: `0x080bb496 : pop eax ; ret`
+    edx: `0x0806f34a : pop edx ; ret`
+    ecx & ebx: `0x0806f371 : pop ecx ; pop ebx ; ret`
+    mov: `0x0807be31 : mov dword ptr [eax], edx ; ret`
+    syscall (`int 0x80` in x86): `0x08049761 : int 0x80`
+    `/bin/sh` destination: `0x80eb928`
+
+
 # Notes
 
 ## Defence
