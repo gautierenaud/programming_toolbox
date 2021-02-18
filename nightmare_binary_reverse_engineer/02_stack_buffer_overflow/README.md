@@ -154,6 +154,46 @@
     syscall (`int 0x80` in x86): `0x08049761 : int 0x80`
     `/bin/sh` destination: `0x80eb928`
 
+* baby_boi
+
+    64bit x86 little endian
+    Partial RELRO & NX
+
+    The example uses `libc-2.27.so`, but my executable seems to be using `libc-2.31.so`
+
+    On execution it leaks an address, which is the address of the `printf` function.
+
+    With ghidra, there does not seem to be any interesting method. -> ROP ?
+    Stack overflow with a buffer of 32 bytes.
+
+    Stack seems to have space: 0x00007ffffffdf000
+
+    Buffer: 0x7fffffffdcb0 - 0x7fffffffdcb9
+    rip: 0x7fffffffdcd8
+    delta of 0x28
+
+    Use `one_gadget libc-2.31.so` to find complete gadgets:
+    ```
+    0xe6c7e execve("/bin/sh", r15, r12)
+    constraints:
+    [r15] == NULL || r15 == NULL
+    [r12] == NULL || r12 == NULL
+
+    0xe6c81 execve("/bin/sh", r15, rdx)
+    constraints:
+    [r15] == NULL || r15 == NULL
+    [rdx] == NULL || rdx == NULL
+
+    0xe6c84 execve("/bin/sh", rsi, rdx)
+    constraints:
+    [rsi] == NULL || rsi == NULL
+    [rdx] == NULL || rdx == NULL
+    ```
+
+    We'll be using the one at `0xe6c81`.
+
+    Interesting to note that pwn contains facilities to open libraries (here `libc-2.31.so`) so we can compute the delta in the library in case it has RELRO enabled.
+
 
 # Notes
 
@@ -174,6 +214,18 @@ Non-Executable stack. Remove 'x' right from the stack (so no code execution from
 Look for other writable region in memory for exploits.
 
 To test the security, try in gef `j *addr` to just jump to that address. If it is at the stack and it is protected, you'll got a sigsev.
+
+### Canary
+
+Same with the miners' canary that stops singing when intoxicated with gaz, the canary exists to check for memory overwrite. It does so by assigning itself a random number (which two last bytes being `00`), then checking itself at the end of the execution.
+
+Main bypass is to overwrite it with it's own value.
+
+### RELRO
+
+Putting some part of the memory as read only (as opposed to NX that removes the execution right).
+
+The easiest bypass is to ignore it.
 
 ## Attack
 

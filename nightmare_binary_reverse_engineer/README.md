@@ -10,3 +10,4 @@ I hope to learn about binaries format, remember a bit what I learned at school, 
 * [GEF](https://github.com/hugsy/gef): GDB Extended Features
 * [pwntools](https://pypi.org/project/pwntools/): to actually script exploits instead of doing them manually. Such as run a target binary, attach gdb to it, ...
     * `pwn checksec <binary>`: checks for protections, e.g. canary, NX (No eXecute), RELRO (RELocation Read Only) and PIE (Position Independent Executable)
+* [one_gadget](https://github.com/david942j/one_gadget): tool to look for rop gadget
