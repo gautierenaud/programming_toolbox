@@ -238,7 +238,6 @@
     offsetBinSh: 0x7ffff7d965aa - 0x7ffff7bdf000 = 0x1b75aa
     ```
 
-
     Since ASLR is enabled, we'll need to leak a libc method address, to compute the "real" address of the gadget. We'll use `puts` for that, by displaying the address of itself. Since PIE is disabled, we can look at the GOT table to look for the pointer to `puts`, since its address is not randomized.
 
     We can use pwn to get the addresses:
@@ -263,8 +262,52 @@
     0x0000000000400ea3 : pop rdi ; ret
     ```
 
+* overfloat
 
+    64bit, LSB
 
+    Partial RELRO, NX
+
+    Asks for a series of lat/lon coordinates. After a while it displays `Too slow, sorry !` -> fork/process ? Typing `done` seems to exit the program. Writing `done` when giving only lat coord will keep us in the loop.
+
+    The main function will pass a buffer to `chart_course`, which will append coordinates at the end of the buffer without checking the size. The buffer used in the `chart_course` method seems to be well handled.
+
+    Within `main` method:
+    buffer at 0x00007fffffffdc90
+    rip at 0x7fffffffdcc8
+    -> delta of 0x38
+
+    On my computer the executable is using `libc-2.31.so`, so with one_gadget:
+    ```
+    0xe6c7e execve("/bin/sh", r15, r12)
+    constraints:
+    [r15] == NULL || r15 == NULL
+    [r12] == NULL || r12 == NULL
+
+    0xe6c81 execve("/bin/sh", r15, rdx)
+    constraints:
+    [r15] == NULL || r15 == NULL
+    [rdx] == NULL || rdx == NULL
+
+    0xe6c84 execve("/bin/sh", rsi, rdx)
+    constraints:
+    [rsi] == NULL || rsi == NULL
+    [rdx] == NULL || rdx == NULL
+    ```
+
+    We'll need an infoleak to get the right delta to add to the gadget. For that we'll use puts:
+    ```
+                        PTR_puts_00602020   XREF[1]:     puts:00400690  
+    00602020 08 30 60   addr       puts
+             00 00 00 
+             00 00
+    ```
+    got entry: 00602020
+    plt entry: 00400690
+    gadget to call puts with it's got value:
+    `0x0000000000400a83 : pop rdi ; ret`
+
+    We'll do a first ROP with `chart_course` to print the puts' address.
 
 # Notes
 
