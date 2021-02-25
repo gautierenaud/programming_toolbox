@@ -309,6 +309,32 @@
 
     We'll do a first ROP with `chart_course` to print the puts' address.
 
+* storytime
+
+    64bits, LSB
+
+    Partial RELRO, NX
+
+    Simple overflow with a read ? -> challenge is with the infoleak !
+
+    buffer at 0x7fffffffdc90
+    rip at 0x7fffffffdcc8
+    -> delta 0x38
+
+    We'll use write for the infoleak by writing to stdout.
+    write_got: 0x00601018
+    write_plt: 0x004004a0
+
+    Write parameters:
+    * rdi: file descriptor -> `1`
+        * Gadget: `0x0000000000400703 : pop rdi ; ret`
+        * or jump to `0x00400601` since it will set rdi to 1 just before calling write
+    * rsi: pointer to the buffer to write -> pointer to got write
+        * gadget: `0x0000000000400701 : pop rsi ; pop r15 ; ret`
+    * rdx: size to write -> 8 bytes ? last value of rdx is 400 so it is enough
+
+    we'll use the same gadget as previous one to open a shell. -> nope, finally used `0xe6c7e` since I found a gadget to reset the necessary registers to 0.
+
 # Notes
 
 ## Defence
