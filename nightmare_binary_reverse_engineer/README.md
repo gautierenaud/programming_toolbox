@@ -8,6 +8,9 @@ I hope to learn about binaries format, remember a bit what I learned at school, 
 
 * [Ghidra](https://ghidra-sre.org/): NSA's tools for reverse engineering, released in 2019
 * [GEF](https://github.com/hugsy/gef): GDB Extended Features
+    * `p/f 0x12345`: print content at 0x12345 as float
+    * `x/10w 0x12345`: eXamine 10 words from 0x12345
 * [pwntools](https://pypi.org/project/pwntools/): to actually script exploits instead of doing them manually. Such as run a target binary, attach gdb to it, ...
     * `pwn checksec <binary>`: checks for protections, e.g. canary, NX (No eXecute), RELRO (RELocation Read Only) and PIE (Position Independent Executable)
 * [one_gadget](https://github.com/david942j/one_gadget): tool to look for rop gadget
+* [disassembly] (https://defuse.ca/online-x86-assembler.htm#disassembly2): useful to get the assembly code corresponding to a byte string (e.g. shellcode).

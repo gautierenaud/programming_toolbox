@@ -347,6 +347,10 @@ How to circumvent [ASLR/PIE protection](https://guyinatuxedo.github.io/5.1-mitig
 
 gdb (or gef) can put a breakpoint even with pie enabled (in gef: `pie b *addr`).
 
+ASLR: address space randomization -> every "memory" thing will have an offset on execution. (e.g. heap, stack, libs, ...)
+
+PIE: position independent executable -> every "binary" thing will have an offset on execution.
+
 ### nx
 
 Non-Executable stack. Remove 'x' right from the stack (so no code execution from here).
