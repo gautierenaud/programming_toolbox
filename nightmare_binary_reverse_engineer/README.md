@@ -7,6 +7,8 @@ I hope to learn about binaries format, remember a bit what I learned at school, 
 # Useful tools
 
 * [Ghidra](https://ghidra-sre.org/): NSA's tools for reverse engineering, released in 2019
+    * `;`: add comments
+    * `l`: rename variable
 * [GEF](https://github.com/hugsy/gef): GDB Extended Features
     * `p/f 0x12345`: print content at 0x12345 as float
     * `x/10w 0x12345`: eXamine 10 words from 0x12345
