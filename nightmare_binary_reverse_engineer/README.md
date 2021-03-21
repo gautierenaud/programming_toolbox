@@ -16,3 +16,4 @@ I hope to learn about binaries format, remember a bit what I learned at school, 
     * `pwn checksec <binary>`: checks for protections, e.g. canary, NX (No eXecute), RELRO (RELocation Read Only) and PIE (Position Independent Executable)
 * [one_gadget](https://github.com/david942j/one_gadget): tool to look for rop gadget
 * [disassembly] (https://defuse.ca/online-x86-assembler.htm#disassembly2): useful to get the assembly code corresponding to a byte string (e.g. shellcode).
+* [angr](https://github.com/angr/angr): binary analysis platform. We can for example make it explore how to reach a certain point (e.g. the flag part)
