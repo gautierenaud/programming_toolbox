@@ -345,7 +345,7 @@ Add a randomized offset at the beginning of memory regions.
 
 How to circumvent [ASLR/PIE protection](https://guyinatuxedo.github.io/5.1-mitigation_aslr_pie/index.html). The relative layout of the memory is the same (`vmmap` in gdb) even if there is a random offset. So we try to leak one address of a memory region to deduce the layout of this region (not the others).
 
-gdb (or gef) can put a breakpoint even with pie enabled (in gef: `pie b *addr`).
+gdb (or gef) can put a breakpoint even with pie enabled (in gef: `pie b *addr` then `pie run` instead of just `run`).
 
 ASLR: address space randomization -> every "memory" thing will have an offset on execution. (e.g. heap, stack, libs, ...)
 
