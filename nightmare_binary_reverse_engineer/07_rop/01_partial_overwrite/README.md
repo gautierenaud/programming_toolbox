@@ -52,7 +52,7 @@
 
     Useful to look for method address in gdb: `info address <method_name>`
 
-*vuln-chat2
+* vuln-chat2
     32bits, LSB, intel 80386, dynamically linked, NX.
 
     Ask for name and for information, and seemingly gives a flag away.
