@@ -1,0 +1,94 @@
+# SROP
+
+* funsignals:
+    64bits LSB, statically linked, No security.
+    
+    Seems to expect an input, but giving it numbers causes a segmentation fault.
+
+    When looking with ghidra and [syscall table](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md#x86_64-64_bit), it seems that it first look at stdin:
+    ```
+    10000000 31 c0           XOR        EAX,EAX -> 0x0
+    10000002 31 ff           XOR        EDI,EDI -> 0x0
+    10000004 31 d2           XOR        EDX,EDX -> 0x0
+    10000006 b6 04           MOV        DH,0x4  -> 0x400
+    10000008 48 89 e6        MOV        RSI,RSP -> output address
+    1000000b 0f 05           SYSCALL    -> "read 0x400 bytes from stdin and put it at *rsi, e.g. *rsp, e.g. top of the stack"
+    ```
+
+    Then it will do a sigreturn
+    ```
+    1000000d 31 ff           XOR        EDI,EDI
+    1000000f 6a 0f           PUSH       0xf
+    10000011 58              POP        RAX
+    10000012 0f 05           SYSCALL    -> rt_sigreturn
+    ```
+
+    pwntools allows to craft a stackframe that will be used during the sigreturn to populate the different register. What we want to do here is:
+    * populate the register with the right values
+    * so we can take the execution back at the right point (e.g. syscall) so it will just print the flag.
+
+    A write syscall will do for us, with:
+    * rax: 0x1 (write)
+    * rdi: 0x1 (stdout)
+    * rsi: 0x10000023 (flag location)
+    * rdx: 0x30 (size of content to print, here value is completely approximate)
+    * rip: 0x1000000b (syscall, 0x10000012 would do too)
+
+    For notes, the stack context is described in [Nightmare](https://guyinatuxedo.github.io/16-srop/backdoor_funsignals/index.html) as:
+    ```
+    +--------------------+--------------------+
+    | rt_sigeturn()      | uc_flags           |
+    +--------------------+--------------------+
+    | &uc                | uc_stack.ss_sp     |
+    +--------------------+--------------------+
+    | uc_stack.ss_flags  | uc.stack.ss_size   |
+    +--------------------+--------------------+
+    | r8                 | r9                 |
+    +--------------------+--------------------+
+    | r10                | r11                |
+    +--------------------+--------------------+
+    | r12                | r13                |
+    +--------------------+--------------------+
+    | r14                | r15                |
+    +--------------------+--------------------+
+    | rdi                | rsi                |
+    +--------------------+--------------------+
+    | rbp                | rbx                |
+    +--------------------+--------------------+
+    | rdx                | rax                |
+    +--------------------+--------------------+
+    | rcx                | rsp                |
+    +--------------------+--------------------+
+    | rip                | eflags             |
+    +--------------------+--------------------+
+    | cs / gs / fs       | err                |
+    +--------------------+--------------------+
+    | trapno             | oldmask (unused)   |
+    +--------------------+--------------------+
+    | cr2 (segfault addr)| &fpstate           |
+    +--------------------+--------------------+
+    | __reserved         | sigmask            |
+    +--------------------+--------------------+
+    ```
+
+    While we can see in gdb the dump of the memory region we just overwrited:
+    ```
+    0x7fffcd8c7ba0:	0x0	0x0
+    0x7fffcd8c7bb0:	0x0	0x0
+    0x7fffcd8c7bc0:	0x0	0x0
+    0x7fffcd8c7bd0:	0x0	0x0
+    0x7fffcd8c7be0:	0x0	0x0
+    0x7fffcd8c7bf0:	0x0	0x0
+    0x7fffcd8c7c00:	0x0	0x1
+    0x7fffcd8c7c10:	0x10000023	0x0
+    0x7fffcd8c7c20:	0x0	0x400
+    0x7fffcd8c7c30:	0x1	0x0
+    0x7fffcd8c7c40:	0x0	0x1000000b
+    0x7fffcd8c7c50:	0x0	0x33
+    0x7fffcd8c7c60:	0x0	0x0
+    0x7fffcd8c7c70:	0x0	0x0
+    0x7fffcd8c7c80:	0x0	0x0
+    0x7fffcd8c7c90:	0x0	0x7fffcd8c9617
+    ```
+
+    I am not sure if the representation matches perfectly, but at least it shows me that having the frame object representation makes things easier for me ^^
