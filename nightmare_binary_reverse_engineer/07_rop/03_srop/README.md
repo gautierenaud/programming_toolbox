@@ -92,3 +92,25 @@
     ```
 
     I am not sure if the representation matches perfectly, but at least it shows me that having the frame object representation makes things easier for me ^^
+
+* smallboi:
+    64bits, LSB, x86-64, statically linked.
+
+    Only NX is enabled.
+
+    Seems to asks for an input upon execution.
+
+    Looking at the ghidra analysis, we can see a syscall that will read a user input within a method (and we can probably rewrite the context), and a "/bin/sh" string floating around 0x004001ca. So we will probably do a srop so that we will jump to a syscall to execute "/bin/sh".
+
+    So I guess will need to prepare a stack context such as:
+    * rax: 0x3b (execve)
+    * rdi: 0x004001ca ("/bin/sh")
+    * rsi: 0x0 (argv)
+    * rdx: 0x0 (envp)
+    * rip: 0x004001c5 (syscall, 0x004001a4 would do too)
+
+    Note that the payload will be read with an offset of 0x28 bytes.
+
+    But that was not enough, I forgot about how to trigger the srop, with a call to `sigreturn` ! Hopefully, there is a method in the binary that does just that (@ 0x0040017c). So we can just overwrite the return address to jump to the method, which will then just load our stack context.
+
+    Also, the stack frame payload's first 8 bytes needs to be trimmed to be rightly aligned for the sigreturn. Don't ask me why.
