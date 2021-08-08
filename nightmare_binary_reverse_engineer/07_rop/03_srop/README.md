@@ -1,5 +1,11 @@
 # SROP
 
+As I understand, srop is a hack based on the usage of a sigret that will load a stack context over which we have control. I **think** it is useful when we don't have all necessary gadgets to do an execve syscall ourself.
+
+Useful tricks seen in this section:
+* double `alarm` to set `rax`
+* change permission of memory region with `mprotect`
+
 * funsignals:
     64bits LSB, statically linked, No security.
     
@@ -114,3 +120,62 @@
     But that was not enough, I forgot about how to trigger the srop, with a call to `sigreturn` ! Hopefully, there is a method in the binary that does just that (@ 0x0040017c). So we can just overwrite the return address to jump to the method, which will then just load our stack context.
 
     Also, the stack frame payload's first 8 bytes needs to be trimmed to be rightly aligned for the sigreturn. Don't ask me why.
+
+* stupidrop:
+    64bits LSB, x86-64, dynamically linked. NX and partial RELRO.
+
+    As with the previous ones, it asks for an input that will probably lead to a rop.
+
+    To begin with we have an overflow when reading the input.
+
+    As per nightmare's lead, we'll do the following:
+    * send a payload that will contain the following:
+        * a return address overwrite to another `gets` call
+        * preparation for the `gets` call to store a user provided `/bin/sh` string in an appropriate location
+        * a sigret with a stack frame that will provide the necessary addresses for a syscall for an execve
+    * send `/bin/sh` since our crafted payload asks for it
+
+    The biggest new thing in this exercice is how to set rax to 0xf. Indeed, there is no useful pop_rax gadget in this executable, and the presented path in this exercice was to use `alarm`. When `alarm` is called twice, the second time being before the first has rung off, it will return the remaining seconds and put it into rax (how convenient !). So we'll have to call a first `alarm` with 0xf seconds, then immediatly another one with 0x0 seconds.
+
+* syscaller:
+    ```
+    file syscaller
+    syscaller: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, BuildID[sha1]=15d03138700bbfd52c735087d738b7433cfa7f22, not stripped
+    ```
+
+    ```
+    pwn checksec syscaller
+        Arch:     amd64-64-little
+        RELRO:    No RELRO
+        Stack:    No canary found
+        NX:       NX disabled
+        PIE:      No PIE (0x400000)
+    ```
+
+    As always, asks for an input.
+
+    In the executable we can see 4 syscalls:
+    * write a string: `Hello and welcome to the Labyrinthe. Make your way or perish.`
+    * read user's input: 0x200 from rsp
+    * pop different registers for unknown purpose (read nothing from stdin ?):
+        ```
+        0040011e 5f              POP        RDI
+        0040011f 58              POP        RAX
+        00400120 5b              POP        RBX
+        00400121 5a              POP        RDX
+        00400122 5e              POP        RSI
+        00400123 5f              POP        RDI
+        ```
+
+    * exit 0
+
+    First hypothesis: control the registers listed above to do a read syscall inducing sigret, then another sigret that will do the execve ?
+
+    But soon I came upon a problem: where to write it ? The only region available was the stack, without info leaks :/ The author of Nightmare run into a similar problem, and resulted into using a `mprotect` syscall with a sigret to change the rights.
+
+    So the final workflow will be as follows:
+    * exploit the multi pop syscall to do a sigret that will:
+        * add the write permission to the program region itself
+        * set the return pointer at the beginning of the call to the `read` syscall
+        * set `esp` that will be used by the read call to the memory zone just after the syscall to read. Thus we will be able to change the code itself
+    * send a shell code that will be read by our exploited read syscall, that will right it just after the it's own execution
