@@ -12,6 +12,7 @@ I hope to learn about binaries format, remember a bit what I learned at school, 
 * [GEF](https://github.com/hugsy/gef): GDB Extended Features
     * `p/f 0x12345`: print content at 0x12345 as float
     * `x/10w 0x12345`: eXamine 10 words from 0x12345
+    * `set {int}target_addr=value`: change the value at the target
 * [pwntools](https://pypi.org/project/pwntools/): to actually script exploits instead of doing them manually. Such as run a target binary, attach gdb to it, ...
     * `pwn checksec <binary>`: checks for protections, e.g. canary, NX (No eXecute), RELRO (RELocation Read Only) and PIE (Position Independent Executable)
 * [one_gadget](https://github.com/david942j/one_gadget): tool to look for rop gadget
