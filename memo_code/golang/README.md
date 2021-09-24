@@ -375,6 +375,45 @@ func foo(is ...int) {
 
 ## Context
 
+From [here](https://pkg.go.dev/context):
+```
+Package context defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes. 
+```
+
+Usecase examples:
+* To pass data to the downstream. Eg.  a HTTP request creates a request_id, request_user which needs to be passed around to all downstream functions for distributed tracing.
+* When you want to halt the operation in the midway – A HTTP request should be stopped because the client disconnected
+* When you want to halt the operation within a specified time from start i.e with timeout – Eg- a HTTP request should be completed in 2 sec or else should be aborted.
+* When you want to halt an operation before a certain time – Eg. A cron is running that needs to be aborted in 5 mins if not completed.
+
+Example using `select` to take in account the context's timeout:
+```go
+package main
+ 
+import (
+    "context"
+    "fmt"
+    "log"
+    "time"
+)
+ 
+func main() {
+    c := context.Background()
+    c, cancel := context.WithTimeout(c, time.Second)
+        defer cancel()
+        myfunc(c,time.Second,"Gopher")
+        }
+ 
+func myfunc(c context.Context,d time.Duration, arg string) string {
+     select {
+     case <- time.After(d):
+           fmt.Println("Hello %s",arg)
+     case <- c.Done():
+           log.Print(c.Err())
+     }
+}
+```
+
 ## defer
 
 Defer the execution of the method at the end of the closure:
