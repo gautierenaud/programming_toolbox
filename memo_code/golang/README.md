@@ -196,8 +196,7 @@ fmt.Println("Do complicated stuff")
 
 ```go
 import (
-    "fmt"
-    
+    "fmt"   
 )
 
 func waitSome(c chan int) {
@@ -308,7 +307,55 @@ If + Else is the idiomatic way to do a ternary operator in go.
 
 # Recursion
 
+```go
+func recSum(val int) int{
+	if val == 0 {
+		return 0
+	}
+	return val + recSum(val - 1)
+}
+```
+
 # Regex
+
+Simple matches:
+```go
+found, err := regexp.MatchString(".even", "Steven")
+```
+
+```go
+re, err := regexp.Compile(".even")
+
+if err != nil {
+	log.Fatal(err)
+}
+
+doesMatch := re.MatchString("Steven")
+occurences := re.FindAllString(content, -1) // -1 for all matches
+```
+
+Capture groups:
+```go
+re, err := regexp.Compile("(\\w+)")
+
+if err != nil {
+	log.Fatal(err)
+}
+
+parts := re.FindStringSubmatch("Hello World")  // [Hello Hello]
+parts := re.FindAllStringSubmatch("Hello World", -1)  // [[Hello Hello] [World World]]
+```
+
+Replace string:
+```go
+re, err := regexp.Compile("Steve")
+
+if err != nil {
+	log.Fatal(err)
+}
+
+replaced := re.ReplaceAllString("Hello Steve", "Hugh")
+```
 
 # Multiple args
 
