@@ -425,3 +425,38 @@ fmt.Println("before")
 ```
 
 ## Type assertion vs conversion
+
+## iota
+
+From [here](https://yourbasic.org/golang/iota/):
+* The iota keyword represents successive integer constants 0, 1, 2,…
+* It resets to 0 whenever the word const appears in the source code,
+* and increments after each const specification.
+
+```go
+const (
+	C0 = iota   // 0
+	C1          // 1
+	C2          // 2
+)
+```
+
+It can also be used for bitmasks:
+```go
+const (
+    F0 Bits = 1 << iota     // 1
+    F1                      // 2
+    F2                      // 4
+)
+```
+
+To skip:
+```go
+const (
+    F0 = iota       // 0
+    F1              // 1
+    _
+    F2              // 3
+    F3 = iota + 2   // 6
+)
+```
