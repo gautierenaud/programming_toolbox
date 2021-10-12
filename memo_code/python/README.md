@@ -1,6 +1,7 @@
 # Python
 
 https://www.codingame.com/work/python-interview-questions/
+
 https://sadh.life/post/builtins/
 
 # For loop
