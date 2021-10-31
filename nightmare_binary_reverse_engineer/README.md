@@ -19,3 +19,9 @@ I hope to learn about binaries format, remember a bit what I learned at school, 
 * [disassembly] (https://defuse.ca/online-x86-assembler.htm#disassembly2): useful to get the assembly code corresponding to a byte string (e.g. shellcode).
 * [angr](https://github.com/angr/angr): binary analysis platform. We can for example make it explore how to reach a certain point (e.g. the flag part)
 * [readelf](https://man7.org/linux/man-pages/man1/readelf.1.html) simple executable that displays information about elf files
+
+# Mindmap
+
+I'm trying to create a mindmap of what I'm learning, using an extension from vscode (vscode-mindmap). I just wanted it to be in text format and relatively easy to (re)use, whether the vscode extension survives or not.
+
+![imagine a beautiful mindmap about pwn](doc/security_mindmap.png?raw=true "Pwn Mindmap")

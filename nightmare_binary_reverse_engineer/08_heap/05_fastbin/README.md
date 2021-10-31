@@ -161,11 +161,28 @@
 
     At this point I will just use the tutorial's answer in a ubuntu16.04 docker, since I consider I grasped most of the aspects of the exploits.
     ```
-    # docker build -t ubuntu16_04_pwn .
-    # docker run -it --rm -v `pwd`:/tmp -w /tmp  ubuntu16_04_pwn
+    ❯ docker build -t ubuntu16_04_pwn .
+    ❯ docker run -it --rm -v `pwd`:/tmp -w /tmp  ubuntu16_04_pwn
     # python3.8 babyheap_pwn_tutorial.py
     [...]
     $ ls
     0ctfbabyheap  babyheap_pwn.py        core          libc-2.31.so
     Dockerfile    babyheap_pwn_tutorial.py    libc-2.23.so
     ```
+
+* auir:
+
+    ```bash
+    ❯ file auir
+    auir: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, stripped
+    ❯ pwn checksec auir
+        Arch:     amd64-64-little
+        RELRO:    Partial RELRO
+        Stack:    No canary found
+        NX:       NX enabled
+        PIE:      No PIE (0x400000)
+    ```
+
+    The executable seems to be a classic memory management utility, with the ability to allocate, fill, display and delete memory.
+
+    As expected, we can see here a way to overwrite the content of a "zealot's skill", where we can specify a size to our liking. I won't be surprised if we use this "feature" to fake memory chunks ^^

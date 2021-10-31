@@ -1,0 +1,272 @@
+{
+    "root": {
+        "data": {
+            "id": "cfduozn0ki00",
+            "created": 1635709693761,
+            "text": "pwn",
+            "expandState": "expand"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "cfduqdbx02o0",
+                    "created": 1635709801929,
+                    "text": "initial analysis",
+                    "expandState": "expand",
+                    "layout_mind_offset": {
+                        "x": 47,
+                        "y": 1
+                    }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cfdupffbvyg0",
+                            "created": 1635709728124,
+                            "text": "$ file <exec>",
+                            "layout_mind_offset": {
+                                "x": 144,
+                                "y": -10
+                            },
+                            "layout_right_offset": {
+                                "x": 27,
+                                "y": -73
+                            },
+                            "expandState": "expand"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfdur8tyceg0",
+                                    "created": 1635709870499,
+                                    "text": "dynamic/static linking"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdvdl24lj40",
+                                            "created": 1635711621127,
+                                            "text": "external lib to use or not"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvct7lx7k0",
+                                    "created": 1635711560508,
+                                    "text": "endianness",
+                                    "expandState": "expand"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdvcb5c1wg0",
+                                            "created": 1635711521189,
+                                            "text": "might need to reverse payload (e.g. shellcode) 2 bytes by 2"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvd6r3nw80",
+                                    "created": 1635711589985,
+                                    "text": "target arch"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdvd98dm6g0",
+                                            "created": 1635711595383,
+                                            "text": "syscall lookup table"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfdurw049jc0",
+                            "created": 1635709920938,
+                            "text": "$ pwn  checksec <exec>"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfdusss62yg0",
+                                    "created": 1635709992291,
+                                    "text": "RELRO"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfduuw3qy9s0",
+                                            "created": 1635710156250,
+                                            "text": "Relocation Read-Only: protect section to resolve dynamic loading from writing"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfduwbp5qy80",
+                                    "created": 1635710268561,
+                                    "text": "Stack (Canary)"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfduwedotu00",
+                                            "created": 1635710274398,
+                                            "text": "Protection to mitigate buffer overflow: if the canary is overwritten by an overflow, then the program errors out"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdux57zsco0",
+                                            "created": 1635710332826,
+                                            "text": "Solution: leak canary before",
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdv0bu27ao0",
+                                            "created": 1635710582314,
+                                            "text": "Ends with 0x00, e.g. `0xb2ef800`"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdv1c0xwew0",
+                                    "created": 1635710661094,
+                                    "text": "NX"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdv1sxsdls0",
+                                            "created": 1635710697909,
+                                            "text": "No-eXecutable bit: Stack is not executable"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdv1xwts7s0",
+                                            "created": 1635710708734,
+                                            "text": "Can also be seen through gdb's `vmmap`: ... rw- [stack]"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdv53ycxvc0",
+                                            "created": 1635710956980,
+                                            "text": "Solution: `mprotect` syscall to change rights",
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdv8va6uvk0",
+                                    "created": 1635711251561,
+                                    "text": "PIE"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdv8wurriw0",
+                                            "created": 1635711254982,
+                                            "text": "Position Independent Executable: dependencies are loaded into random locations each time of the execution"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdvai9vgu80",
+                                            "created": 1635711379972,
+                                            "text": "Solution: leak an address, then compute the random delta using the original address from libc",
+                                            "priority": null,
+                                            "progress": null,
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cfdvehil04g0",
+                    "created": 1635711691779,
+                    "text": "exploits"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cfdveops9340",
+                            "created": 1635711707452,
+                            "text": "stack"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cfdvejzkf000",
+                            "created": 1635711697159,
+                            "text": "Heap"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfdvia3zkeo0",
+                                    "created": 1635711989115,
+                                    "text": "UAF (Use After Free)"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdvjew1p8g0",
+                                            "created": 1635712077883,
+                                            "text": "continue to use a pointer to a heap section after it being freed"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdvk7iibkg0",
+                                            "created": 1635712140191,
+                                            "text": "When the pointer is not set to NULL after the call to `free`"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
