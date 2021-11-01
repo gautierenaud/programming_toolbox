@@ -315,7 +315,7 @@
                     "id": "cfdvehil04g0",
                     "created": 1635711691779,
                     "text": "exploits",
-                    "note": "sdcsfsdfsdfsfd",
+                    "note": null,
                     "font-weight": "bold",
                     "layout": null
                 },
@@ -364,6 +364,67 @@
                                         "children": []
                                     }
                                 ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfelfahrph40",
+                                    "created": 1635785103714,
+                                    "text": "fastbin attack"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfelg75hu340",
+                                            "created": 1635785174805,
+                                            "text": "Freed chunk in fastbin will have pointer to previous freed chunk"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfelgta437s0",
+                                            "created": 1635785222974,
+                                            "text": "Overwriting this pointer and then allocate it will then spawn a fake chunk at the location we want"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfelicqz54o0",
+                                            "created": 1635785343717,
+                                            "text": "allocating this fake chunk and then write with it to do whatever we want",
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfeld3foyk00",
+                            "created": 1635784931622,
+                            "text": "pop a shell"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfeld64huxk0",
+                                    "created": 1635784937476,
+                                    "text": "change got.plt: replace any method with `system` and make it use a \"/bin/sh\" string",
+                                    "background": "#92d050"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfele5o49000",
+                                    "created": 1635785014850,
+                                    "text": "shellcode: put hex code that will pop a shell at the return address in an executable stack",
+                                    "background": "#92d050"
+                                },
+                                "children": []
                             }
                         ]
                     }

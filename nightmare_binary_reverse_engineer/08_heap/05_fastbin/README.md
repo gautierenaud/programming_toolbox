@@ -200,3 +200,15 @@
     Well, maybe it was not so simple afterall. I don't know if the inner working of libc changed, but the leaked address corresponds to other addresses in the heap, so they don't help me in the exploit.
 
     Note to self: in order to leak an address of main_arena, I have to allocate a big chunk (> 0xf0) so that it would go to unsorted_bin for main_arena directly (and then leak it).
+
+    For the rest of the exploit I followed the tutorial with some minor modifications:
+    * overwrite linked list data from freed chunk, so that next time it is allocated it will create a fake chunk located just before the array containing all the different memory addresses (`0x605310`)
+    * use up all tcache
+    * allocate a chunk from the fast bin (which will create a fake chunk)
+    * allocated the fake chunk which will give us write access to the list of pointers
+    * overwrite first entry (although any entry should do) so that it points to `auir`'s `free` entry in the got.plt table
+    * overwrite got.plt entry with libc's `system` address. Thus we will now call `system` when calling `free`
+    * write `/bin/sh` string somewhere (second entry in the example)
+    * calling `destroy_zealots` where we wrote `/bin/sh` will trigger `system` instead of `free`, which will pop us a shell
+    
+    In this exercise everything seemed harder than in the tutorial, particularily because of tcache. I was able to circumvent it, but I had to take care of filling tcache beforehand, manage the right indexes and be sure of the timing to use up tcache so I can access my fake chunk. But in the end I was happy to see that I can pop a shell even with a recent libc.
