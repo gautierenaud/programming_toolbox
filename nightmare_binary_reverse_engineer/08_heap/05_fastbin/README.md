@@ -186,3 +186,17 @@
     The executable seems to be a classic memory management utility, with the ability to allocate, fill, display and delete memory.
 
     As expected, we can see here a way to overwrite the content of a "zealot's skill", where we can specify a size to our liking. I won't be surprised if we use this "feature" to fake memory chunks ^^
+
+    One other thing that might come handy is the `destroy zealots` that will not erase the pointer to the freed memory (UAF and double free), nor decrement the counter (aka number of zealots).
+
+    For the double free I'll have to do some more mitigation, since by default tcache will be used with my version of libc.
+
+    Also the `display skills` will only display the first 8 bytes.
+
+    In the tutorial UAF was suggested as an easy way to leak an address. I initially tried to leak it by myself by freeing one chunk. However there were null bytes so that when displaying it I'll only get 0x00s :/ I then tried to overwrite the first bytes by overflowing from another chunk before it, to no avail.
+    
+    The solution was simple though. Just free 2 chunks instead of 1, so I'll get a pointer to the main arena in the second freed chunk. The null bytes in the first freed chunk are there since it is litterally the **first** chunk, so in the linked list the first address will be `0x00`.
+
+    Well, maybe it was not so simple afterall. I don't know if the inner working of libc changed, but the leaked address corresponds to other addresses in the heap, so they don't help me in the exploit.
+
+    Note to self: in order to leak an address of main_arena, I have to allocate a big chunk (> 0xf0) so that it would go to unsorted_bin for main_arena directly (and then leak it).

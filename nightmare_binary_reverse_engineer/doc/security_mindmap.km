@@ -13,10 +13,7 @@
                     "created": 1635709801929,
                     "text": "initial analysis",
                     "expandState": "expand",
-                    "layout_mind_offset": {
-                        "x": 47,
-                        "y": 1
-                    }
+                    "layout": null
                 },
                 "children": [
                     {
@@ -28,25 +25,24 @@
                                 "x": 144,
                                 "y": -10
                             },
-                            "layout_right_offset": {
-                                "x": 27,
-                                "y": -73
-                            },
-                            "expandState": "expand"
+                            "expandState": "expand",
+                            "layout": null
                         },
                         "children": [
                             {
                                 "data": {
                                     "id": "cfdur8tyceg0",
                                     "created": 1635709870499,
-                                    "text": "dynamic/static linking"
+                                    "text": "dynamic/static linking",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfdvdl24lj40",
                                             "created": 1635711621127,
-                                            "text": "external lib to use or not"
+                                            "text": "external lib to use or not",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -57,14 +53,16 @@
                                     "id": "cfdvct7lx7k0",
                                     "created": 1635711560508,
                                     "text": "endianness",
-                                    "expandState": "expand"
+                                    "expandState": "expand",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfdvcb5c1wg0",
                                             "created": 1635711521189,
-                                            "text": "might need to reverse payload (e.g. shellcode) 2 bytes by 2"
+                                            "text": "might need to reverse payload (e.g. shellcode) 2 bytes by 2",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -74,14 +72,16 @@
                                 "data": {
                                     "id": "cfdvd6r3nw80",
                                     "created": 1635711589985,
-                                    "text": "target arch"
+                                    "text": "target arch",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfdvd98dm6g0",
                                             "created": 1635711595383,
-                                            "text": "syscall lookup table"
+                                            "text": "syscall lookup table",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -93,21 +93,24 @@
                         "data": {
                             "id": "cfdurw049jc0",
                             "created": 1635709920938,
-                            "text": "$ pwn  checksec <exec>"
+                            "text": "$ pwn  checksec <exec>",
+                            "layout": null
                         },
                         "children": [
                             {
                                 "data": {
                                     "id": "cfdusss62yg0",
                                     "created": 1635709992291,
-                                    "text": "RELRO"
+                                    "text": "RELRO",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfduuw3qy9s0",
                                             "created": 1635710156250,
-                                            "text": "Relocation Read-Only: protect section to resolve dynamic loading from writing"
+                                            "text": "Relocation Read-Only: protect section to resolve dynamic loading from writing",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -117,14 +120,16 @@
                                 "data": {
                                     "id": "cfduwbp5qy80",
                                     "created": 1635710268561,
-                                    "text": "Stack (Canary)"
+                                    "text": "Stack (Canary)",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfduwedotu00",
                                             "created": 1635710274398,
-                                            "text": "Protection to mitigate buffer overflow: if the canary is overwritten by an overflow, then the program errors out"
+                                            "text": "Protection to mitigate buffer overflow: if the canary is overwritten by an overflow, then the program errors out",
+                                            "layout": null
                                         },
                                         "children": []
                                     },
@@ -133,7 +138,8 @@
                                             "id": "cfdux57zsco0",
                                             "created": 1635710332826,
                                             "text": "Solution: leak canary before",
-                                            "background": "#92d050"
+                                            "background": "#92d050",
+                                            "layout": null
                                         },
                                         "children": []
                                     },
@@ -141,7 +147,8 @@
                                         "data": {
                                             "id": "cfdv0bu27ao0",
                                             "created": 1635710582314,
-                                            "text": "Ends with 0x00, e.g. `0xb2ef800`"
+                                            "text": "Ends with 0x00, e.g. `0xb2ef800`",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -151,14 +158,16 @@
                                 "data": {
                                     "id": "cfdv1c0xwew0",
                                     "created": 1635710661094,
-                                    "text": "NX"
+                                    "text": "NX",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfdv1sxsdls0",
                                             "created": 1635710697909,
-                                            "text": "No-eXecutable bit: Stack is not executable"
+                                            "text": "No-eXecutable bit: Stack is not executable",
+                                            "layout": null
                                         },
                                         "children": []
                                     },
@@ -166,7 +175,8 @@
                                         "data": {
                                             "id": "cfdv1xwts7s0",
                                             "created": 1635710708734,
-                                            "text": "Can also be seen through gdb's `vmmap`: ... rw- [stack]"
+                                            "text": "Can also be seen through gdb's `vmmap`: ... rw- [stack]",
+                                            "layout": null
                                         },
                                         "children": []
                                     },
@@ -175,7 +185,8 @@
                                             "id": "cfdv53ycxvc0",
                                             "created": 1635710956980,
                                             "text": "Solution: `mprotect` syscall to change rights",
-                                            "background": "#92d050"
+                                            "background": "#92d050",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -185,14 +196,16 @@
                                 "data": {
                                     "id": "cfdv8va6uvk0",
                                     "created": 1635711251561,
-                                    "text": "PIE"
+                                    "text": "PIE",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "id": "cfdv8wurriw0",
                                             "created": 1635711254982,
-                                            "text": "Position Independent Executable: dependencies are loaded into random locations each time of the execution"
+                                            "text": "Position Independent Executable: dependencies are loaded into random locations each time of the execution",
+                                            "layout": null
                                         },
                                         "children": []
                                     },
@@ -203,7 +216,150 @@
                                             "text": "Solution: leak an address, then compute the random delta using the original address from libc",
                                             "priority": null,
                                             "progress": null,
-                                            "background": "#92d050"
+                                            "background": "#92d050",
+                                            "layout": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfdvo8zg8lc0",
+                            "created": 1635712456849,
+                            "text": "ghidra",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfdvob09puo0",
+                                    "created": 1635712461252,
+                                    "text": "NSA's reverse engineering tool",
+                                    "layout": null
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvoibi8f40",
+                                    "created": 1635712477169,
+                                    "text": "Analyse code, rename variables for better understanding",
+                                    "layout": null
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvoqn413c0",
+                                    "created": 1635712495285,
+                                    "text": "search for `flag` or `/bin/sh` strings might be useful",
+                                    "layout": null
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfdvp6yxlbc0",
+                            "created": 1635712530829,
+                            "text": "gdb",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfdvp9eajb40",
+                                    "created": 1635712536111,
+                                    "text": "Return address: `i f`",
+                                    "layout": null
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvpnj9qa00",
+                                    "created": 1635712566887,
+                                    "text": "Memory layout: `heap chunks`, `heap bins`, ...",
+                                    "layout": null
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvq8ppcow0",
+                                    "created": 1635712612988,
+                                    "text": "Print values: `x/10gx 0x123456`, ...",
+                                    "layout": null
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfdvqn27zlc0",
+                                    "created": 1635712644220,
+                                    "text": "Navigate in execution flow: `c`, `ni`, `si`, `finish`, ...",
+                                    "layout": null
+                                },
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cfdvehil04g0",
+                    "created": 1635711691779,
+                    "text": "exploits",
+                    "note": "sdcsfsdfsdfsfd",
+                    "font-weight": "bold",
+                    "layout": null
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cfdveops9340",
+                            "created": 1635711707452,
+                            "text": "stack",
+                            "layout": null
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cfdvejzkf000",
+                            "created": 1635711697159,
+                            "text": "Heap",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfdvia3zkeo0",
+                                    "created": 1635711989115,
+                                    "text": "UAF (Use After Free)",
+                                    "layout": null
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfdvjew1p8g0",
+                                            "created": 1635712077883,
+                                            "text": "continue to use a pointer to a heap section after it being freed",
+                                            "layout": null
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfdvk7iibkg0",
+                                            "created": 1635712140191,
+                                            "text": "When the pointer is not set to NULL after the call to `free`",
+                                            "layout": null
                                         },
                                         "children": []
                                     }
@@ -215,50 +371,181 @@
             },
             {
                 "data": {
-                    "id": "cfdvehil04g0",
-                    "created": 1635711691779,
-                    "text": "exploits"
+                    "id": "cfeijha30m80",
+                    "created": 1635776968613,
+                    "text": "libc",
+                    "layout": null
                 },
                 "children": [
                     {
                         "data": {
-                            "id": "cfdveops9340",
-                            "created": 1635711707452,
-                            "text": "stack"
-                        },
-                        "children": []
-                    },
-                    {
-                        "data": {
-                            "id": "cfdvejzkf000",
-                            "created": 1635711697159,
-                            "text": "Heap"
+                            "id": "cfeijjmknv40",
+                            "created": 1635776973722,
+                            "text": "2.31",
+                            "layout": null
                         },
                         "children": [
                             {
                                 "data": {
-                                    "id": "cfdvia3zkeo0",
-                                    "created": 1635711989115,
-                                    "text": "UAF (Use After Free)"
+                                    "id": "cfeijmykf0o0",
+                                    "created": 1635776980978,
+                                    "text": "heap",
+                                    "layout": null
                                 },
                                 "children": [
                                     {
                                         "data": {
-                                            "id": "cfdvjew1p8g0",
-                                            "created": 1635712077883,
-                                            "text": "continue to use a pointer to a heap section after it being freed"
+                                            "id": "cfeijsy53oo0",
+                                            "created": 1635776994013,
+                                            "text": "tcache",
+                                            "layout": null
                                         },
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfeijunn3qw0",
+                                                    "created": 1635776997731,
+                                                    "text": "thread cache",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeijzspec00",
+                                                    "created": 1635777008922,
+                                                    "text": "16 slots (for different sizes)",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeikb5n91c0",
+                                                    "created": 1635777033649,
+                                                    "text": "up to 7 memory chunks per slot",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeiksnb6ts0",
+                                                    "created": 1635777071722,
+                                                    "text": "if full, go to other bins",
+                                                    "layout": null
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cfeil5q8yk00",
+                                                            "created": 1635777100198,
+                                                            "text": "for fastbin attacks or other, fill tcache first",
+                                                            "background": "#92d050",
+                                                            "layout": null
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     },
                                     {
                                         "data": {
-                                            "id": "cfdvk7iibkg0",
-                                            "created": 1635712140191,
-                                            "text": "When the pointer is not set to NULL after the call to `free`"
+                                            "id": "cfein093d000",
+                                            "created": 1635777245005,
+                                            "text": "fastbin",
+                                            "layout": null
                                         },
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfeinmm7kao0",
+                                                    "created": 1635777293687,
+                                                    "text": "size bins range from 0x20 to 0x80",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfeio59ois00",
+                                            "created": 1635777334289,
+                                            "text": "main_arena",
+                                            "expandState": "expand",
+                                            "layout": null
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfeiofc6yhs0",
+                                                    "created": 1635777356208,
+                                                    "text": "default place where memory is allocated",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeiokx42dk0",
+                                                    "created": 1635777368357,
+                                                    "text": "once freed, will hold an address of the main_arena",
+                                                    "background": "#92d050",
+                                                    "expandState": "expand",
+                                                    "layout_left_offset": {
+                                                        "x": -8.74999986961484,
+                                                        "y": 61.24999908730388
+                                                    },
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeiphpmczk0",
+                                                    "created": 1635777439738,
+                                                    "text": "contains different bins for when tcache/fastbin are already full",
+                                                    "layout_left_offset": {
+                                                        "x": -4.999999925494194,
+                                                        "y": -52.49999921768904
+                                                    },
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
                                     }
                                 ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfeilndxptk0",
+                                    "created": 1635777138635,
+                                    "text": "default on ubuntu 20.04",
+                                    "layout": null
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfeilt04iuw0",
+                            "created": 1635777150861,
+                            "text": "2.23",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfeilvkbiy00",
+                                    "created": 1635777156436,
+                                    "text": "default on ubuntu 16.04",
+                                    "layout": null
+                                },
+                                "children": []
                             }
                         ]
                     }
