@@ -222,6 +222,23 @@
                                         "children": []
                                     }
                                 ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfgcta4in1c0",
+                                    "created": 1635963929935,
+                                    "text": "FORTIFY"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfgctc2ita00",
+                                            "created": 1635963934168,
+                                            "text": "If gcc has checked some potential buffer overflow cases during compilation"
+                                        },
+                                        "children": []
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -398,6 +415,32 @@
                                         "children": []
                                     }
                                 ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfgck8ccp9c0",
+                                    "created": 1635963220778,
+                                    "text": "unsorted bin attack"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfgckuz1kz40",
+                                            "created": 1635963270039,
+                                            "text": "freed chunks in unsorted bin will have pointers to main_arena"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfgcl4ipheo0",
+                                            "created": 1635963290819,
+                                            "text": "overwriting the bk pointer allows us to write main_arena's leak anywhere we want",
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -527,6 +570,23 @@
                                                     "layout": null
                                                 },
                                                 "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfh8zjm84v40",
+                                                    "created": 1636054696299,
+                                                    "text": "max bin size is defined by a `global_max_fast` variable in libc"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cfh8zt3ce2g0",
+                                                            "created": 1636054716925,
+                                                            "text": "gdb: x/gx &global_max_fast"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
                                             }
                                         ]
                                     },
@@ -577,6 +637,23 @@
                                                 "children": []
                                             }
                                         ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfh9o1p87hc0",
+                                            "created": 1636056616402,
+                                            "text": "tips"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfh9o3er7eo0",
+                                                    "created": 1636056620123,
+                                                    "text": "When hesitating about which address is used to create another chunk, put invalid values (e.g. aaaaaa, bbbbbb) and see which will cause a crash"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
                                     }
                                 ]
                             },
@@ -605,6 +682,40 @@
                                     "created": 1635777156436,
                                     "text": "default on ubuntu 16.04",
                                     "layout": null
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfh92v5fcxs0",
+                            "created": 1636054956497,
+                            "text": "__free_hook & __malloc_hook"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfh939149q00",
+                                    "created": 1636054986711,
+                                    "text": "check with: p &__free_hook"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfh93e5gl1c0",
+                                    "created": 1636054997858,
+                                    "text": "hooks that are called when using free and malloc"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfh95nakdbk0",
+                                    "created": 1636055174486,
+                                    "text": "Nice destination to overwrite when RELRO is enabled",
+                                    "background": "#92d050"
                                 },
                                 "children": []
                             }
