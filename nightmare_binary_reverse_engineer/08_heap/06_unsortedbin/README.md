@@ -66,3 +66,31 @@ I also looked at [another answer](https://1ce0ear.github.io/2017/10/16/Zerostora
 
 # Magicheap
 
+```bash
+❯ file magicheap
+magicheap: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=7dbbc580bc50d383c3d8964b8fa0e56dbda3b5f1, not stripped
+❯ checksec magicheap
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+```
+
+As most heap exercises, the executable seems to provide a way to malloc, edit a heap chunk and delete it.
+
+With ghidra, we can see a `l33t` method that will cat the flag at `00400c23`. This method is called if the following condition is not met: `if (magic < 0x1306) {`. Maybe we'll use unsorted bin exploit to write main_arena's address into this `magic` var (which is located at `0x006020c0`) ?
+
+Reading `create_heap`, the variable holding the total number of chunks seems to be in the local scope, so we might overwrite the same entry in the list of pointer over and over. Oh we're in a while loop so as long as we're allocating in a row we can create multiple chunks (up to 8). (the executable seems to work just fine, so the scope issue might be my misunderstanding)
+
+The `edit_heap` one will make sure that the desired chunk is allocated before printing it. Of course we can overflow the heap chunk we are editing, there is no size check ^^.
+
+The `delete_heap` option will make sure that the chunk is allocated before freeing it. It is also setting the entry in the list of heap at NULL afterward.
+
+The list of heap will be located at `0x6020e0`, which is quite near `magic` which is at `0x006020c0`.
+
+So if I'm not mistaken, I'll have to trigger an unsorted bin exploit in order to write an address at `magic`'s location. To do that I'll probably need a chunk in `unsorted bin` and a way to write to it. Hopefully I can overflow heap entries, so it might be easy.
+
+For this exploit I decided to try an unlink one, which has an example by [shellphish](https://github.com/shellphish/how2heap/blob/master/glibc_2.31/unsafe_unlink.c). The inner working is quite similar to what we've seen before, i.e. we forge a fake chunk that upon free will give as a write access anywhere we want.
+
+The "trick" being how to play along pointer checks made by libc. In order to do this, we need to be able to tell where our pointer are stored (here at `0x6020e0`) so that we can forge a chunk that seems to be pointing to another "official" chunk. 

@@ -439,6 +439,25 @@
                                             "background": "#92d050"
                                         },
                                         "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfjukd0cduo0",
+                                            "created": 1636318690784,
+                                            "text": "fake a chunk and get write access anywhere",
+                                            "background": "#92d050"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfjukpyohw80",
+                                                    "created": 1636318718981,
+                                                    "text": "need to know where the ptr to the chunks are stored",
+                                                    "background": "#ffc000"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
                                     }
                                 ]
                             }
