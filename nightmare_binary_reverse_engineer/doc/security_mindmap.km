@@ -322,6 +322,14 @@
                                     "layout": null
                                 },
                                 "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfpr29d7ifs0",
+                                    "created": 1636918168710,
+                                    "text": "print backtrace: bt"
+                                },
+                                "children": []
                             }
                         ]
                     }
@@ -359,7 +367,8 @@
                                     "id": "cfdvia3zkeo0",
                                     "created": 1635711989115,
                                     "text": "UAF (Use After Free)",
-                                    "layout": null
+                                    "layout": null,
+                                    "background": "#92d050"
                                 },
                                 "children": [
                                     {
@@ -454,6 +463,168 @@
                                                     "created": 1636318718981,
                                                     "text": "need to know where the ptr to the chunks are stored",
                                                     "background": "#ffc000"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfmeiel2obs0",
+                                    "created": 1636578079597,
+                                    "text": "Heap overflow"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfmeiifl1zk0",
+                                            "created": 1636578087972,
+                                            "text": "quite like stack overflow, write over the boundaries of an allocated chunk"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfmeiwr2vls0",
+                                            "created": 1636578119142,
+                                            "text": "useful since chunks are allocated next to each other in the memory"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfmejo8g45c0",
+                                            "created": 1636578178966,
+                                            "text": "Can modify size or pointers (to other chunks/memory regions)",
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfmekp7xjhs0",
+                                    "created": 1636578259476,
+                                    "text": "large bin attack"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfmeks8qziw0",
+                                            "created": 1636578266055,
+                                            "text": "Combine with overflow or UAF to change pointers in chunk in large bin"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfmeld4y8hs0",
+                                            "created": 1636578311538,
+                                            "text": "When another chunk is put into large bin, we can write it's address anywhere",
+                                            "background": "#92d050"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfpmb0qqxzs0",
+                                    "created": 1636904749667,
+                                    "text": "tcache"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfpmb2p40q00",
+                                            "created": 1636904753920,
+                                            "text": "poisoning"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfpmb5qelqw0",
+                                                    "created": 1636904760529,
+                                                    "text": "Similarily to fastbin attack, replace a fd pointer to an address we want to write over"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmcfh807k0",
+                                                    "created": 1636904860105,
+                                                    "text": "allocating the chunk with the forged address will spawn new fake chunk in tcache"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmd1wlqbs0",
+                                                    "created": 1636904908925,
+                                                    "text": "allocating the fake chunk gives us write access",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfpmdgg4cqw0",
+                                            "created": 1636904940580,
+                                            "text": "stashing"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfpmdir7dd40",
+                                                    "created": 1636904945604,
+                                                    "text": "Uses how calloc interacts with smallbin and tcache"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmdqlnf1c0",
+                                                    "created": 1636904962682,
+                                                    "text": "prep to have 5 chunks in tcache and 2 in small bin"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmeratgtk0",
+                                                    "created": 1636905042568,
+                                                    "text": "overwrite bk pointer of chunk in small bin"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmf59votc0",
+                                                    "created": 1636905072986,
+                                                    "text": "calling CALLOC will spawn our fake chunk in tcache"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmfv51fsw0",
+                                                    "created": 1636905129290,
+                                                    "text": "fake chunk will contain a leak of libc address",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfpmgjgqpq80",
+                                                    "created": 1636905182240,
+                                                    "text": "allocating the fake chunk gives us write access",
+                                                    "background": "#92d050"
                                                 },
                                                 "children": []
                                             }
@@ -671,6 +842,40 @@
                                                     "text": "When hesitating about which address is used to create another chunk, put invalid values (e.g. aaaaaa, bbbbbb) and see which will cause a crash"
                                                 },
                                                 "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfmeftjo63k0",
+                                            "created": 1636577877072,
+                                            "text": "unsorted bin"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfmegbgxf8o0",
+                                                    "created": 1636577916088,
+                                                    "text": "freed chunks that cannot go into fastbin/tcache will first go into this one"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfmegqkyyq00",
+                                                    "created": 1636577948984,
+                                                    "text": "upon allocation, libc will check if there is an usable chunk in unsorted bin"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cfmehl6injc0",
+                                                            "created": 1636578015590,
+                                                            "text": "the unused ones will go into small or large bin according to their size"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
                                             }
                                         ]
                                     }
