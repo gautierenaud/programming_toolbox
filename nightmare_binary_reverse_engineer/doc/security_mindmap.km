@@ -276,6 +276,23 @@
                                     "layout": null
                                 },
                                 "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfvpjew3lfk0",
+                                    "created": 1637523230447,
+                                    "text": "Tips: deduce the structure of the data, in order to see the data flow"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfvpjt24mu00",
+                                            "created": 1637523261287,
+                                            "text": "custom structures can be created"
+                                        },
+                                        "children": []
+                                    }
+                                ]
                             }
                         ]
                     },
@@ -629,6 +646,57 @@
                                                 "children": []
                                             }
                                         ]
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cfvr8zigw600",
+                                    "created": 1637528055549,
+                                    "text": "double free",
+                                    "background": "#92d050"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfvr971ui540",
+                                            "created": 1637528071959,
+                                            "text": "can be used when we can free a chunk multiple times"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfvr9h0dyaw0",
+                                                    "created": 1637528093638,
+                                                    "text": "e.g. ptr not set to null after being freed"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfvr9pndwsg0",
+                                            "created": 1637528112443,
+                                            "text": "freed chunk will appear twice in the appropriate bin"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfvr9zqjriw0",
+                                            "created": 1637528134402,
+                                            "text": "alllocate it once, write target address in place of fd ptr (first bytes)"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfvrb89xi5c0",
+                                            "created": 1637528231352,
+                                            "text": "on second allocation, will give us write access to target address"
+                                        },
+                                        "children": []
                                     }
                                 ]
                             }
