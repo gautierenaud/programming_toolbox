@@ -809,6 +809,23 @@
                                                         "children": []
                                                     }
                                                 ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg0wgb8tqco0",
+                                                    "created": 1638050534970,
+                                                    "text": "allocates a chunk for bookkeeping"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cg0wgmlpyjs0",
+                                                            "created": 1638050559694,
+                                                            "text": "contains counters and links to linked lists"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
                                             }
                                         ]
                                     },
@@ -1008,6 +1025,31 @@
                                     "created": 1636055174486,
                                     "text": "Nice destination to overwrite when RELRO is enabled",
                                     "background": "#92d050"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfyagk4o2kw0",
+                            "created": 1637785369978,
+                            "text": "patchelf"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfyagnlusig0",
+                                    "created": 1637785377548,
+                                    "text": "to use an older version of libc"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cfyah8yazsg0",
+                                    "created": 1637785424013,
+                                    "text": "replace linker with an older one, which will links to older libc"
                                 },
                                 "children": []
                             }
