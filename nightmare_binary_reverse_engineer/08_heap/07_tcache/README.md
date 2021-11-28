@@ -313,7 +313,7 @@ The overwrite succeeded, but I was not able to pop a shell. After following a bi
 
 It's a failure :/
 
-# Popping Cap 0
+# Popping Cap 1
 
 ```bash
 ❯ file popping_caps
@@ -508,3 +508,46 @@ constraints:
 Unfortunatly, it seems that none of the constraints are fullfilled with my host, nor with my ubuntu16.04 VM. I probably need to install one for each version of libc...
 
 Well, at least I grasped the bookkeeping part of tcache, right ?
+
+Anyway I installed a 18.04 VM and it worked ^^
+
+# Popping Cap 2
+
+```bash
+❯ file popping_caps
+popping_caps: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=486f00d8257955869a248ee43ceb59a72b022095, not stripped
+❯ checksec popping_caps
+    Arch:     amd64-64-little
+    RELRO:    No RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+❯ ./popping_caps
+Here is system 0x7fdd0f96a410
+You have 7 caps!
+[1] Malloc
+[2] Free
+[3] Write
+[4] Bye
+Your choice: 
+
+```
+
+Seems to be the same as the previous one, with the difference that we don't have a malloc in the `bye` method, which we could have used to trigger our exploit.
+
+Also, we are able to write more information for each write (`0xff`). Can we write anything we want in the bookkeeping section ?
+
+Reminder, structure of bookkeeping chunk:
+```
+0x56355a8d2000:	0x0000000000000000	0x0000000000000251
+0x56355a8d2010:	0x0000000000000001	0x0000000000000000  <counter>
+0x56355a8d2020:	0x0000000000000000	0x0000000000000000
+0x56355a8d2030:	0x0000000000000000	0x0000000000000000
+0x56355a8d2040:	0x0000000000000000	0x0000000000000000
+0x56355a8d2050:	0x000056355a8d2260	0x0000000000000000  <address>
+0x56355a8d2060:	0x0000000000000000	0x0000000000000000
+```
+
+So in this exercise we can save some instructions compared to the previous one, since we can write more. As the previous one, we will meddle with the bookkeeping chunk, but with more freedom.
+
+As such, we can easily create a fake chunk to write on free_hook (to write `system`'s address, which is the one that is leaked). All we have to do is then to "free" a "/bin/sh" string, which we can find in libc with a `search-pattern /bin/sh`.
