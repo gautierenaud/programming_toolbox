@@ -826,6 +826,14 @@
                                                         "children": []
                                                     }
                                                 ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg1pxn5k5sw0",
+                                                    "created": 1638133705272,
+                                                    "text": "max 0x410 bytes"
+                                                },
+                                                "children": []
                                             }
                                         ]
                                     },
@@ -957,6 +965,74 @@
                                                             "id": "cfmehl6injc0",
                                                             "created": 1636578015590,
                                                             "text": "the unused ones will go into small or large bin according to their size"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cg3fe5an3880",
+                                            "created": 1638307086292,
+                                            "text": "Houses"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cg3feb6w63s0",
+                                                    "created": 1638307099126,
+                                                    "text": "exploits built on top of bugs (e.g. UAF, double free, overflow, ...)"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg3fezpfrh40",
+                                                    "created": 1638307152490,
+                                                    "text": "Spirit"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cg3ff2jw6g80",
+                                                            "created": 1638307158685,
+                                                            "text": "have fake chunks that pass size tests"
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "data": {
+                                                                    "id": "cg3fh81o2wg0",
+                                                                    "created": 1638307327373,
+                                                                    "text": "16.04: fastbin. following chunk need to have legit size too"
+                                                                },
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cg3fhl7dteo0",
+                                                                    "created": 1638307356016,
+                                                                    "text": "20.04: tcache don't check size, only initial fake chunk is needed"
+                                                                },
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cg3ffynrfjk0",
+                                                            "created": 1638307228576,
+                                                            "text": "free fake chunk with valid size header"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cg3fg92bvh40",
+                                                            "created": 1638307251225,
+                                                            "text": "malloc fake chunk to get write access",
+                                                            "background": "#92d050"
                                                         },
                                                         "children": []
                                                     }
