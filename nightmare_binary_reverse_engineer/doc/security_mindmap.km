@@ -736,7 +736,8 @@
                     "id": "cfeijha30m80",
                     "created": 1635776968613,
                     "text": "libc",
-                    "layout": null
+                    "layout": null,
+                    "expandState": "expand"
                 },
                 "children": [
                     {
@@ -747,301 +748,6 @@
                             "layout": null
                         },
                         "children": [
-                            {
-                                "data": {
-                                    "id": "cfeijmykf0o0",
-                                    "created": 1635776980978,
-                                    "text": "heap",
-                                    "layout": null
-                                },
-                                "children": [
-                                    {
-                                        "data": {
-                                            "id": "cfeijsy53oo0",
-                                            "created": 1635776994013,
-                                            "text": "tcache",
-                                            "layout": null
-                                        },
-                                        "children": [
-                                            {
-                                                "data": {
-                                                    "id": "cfeijunn3qw0",
-                                                    "created": 1635776997731,
-                                                    "text": "thread cache",
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfeijzspec00",
-                                                    "created": 1635777008922,
-                                                    "text": "16 slots (for different sizes)",
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfeikb5n91c0",
-                                                    "created": 1635777033649,
-                                                    "text": "up to 7 memory chunks per slot",
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfeiksnb6ts0",
-                                                    "created": 1635777071722,
-                                                    "text": "if full, go to other bins",
-                                                    "layout": null
-                                                },
-                                                "children": [
-                                                    {
-                                                        "data": {
-                                                            "id": "cfeil5q8yk00",
-                                                            "created": 1635777100198,
-                                                            "text": "for fastbin attacks or other, fill tcache first",
-                                                            "background": "#92d050",
-                                                            "layout": null
-                                                        },
-                                                        "children": []
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cg0wgb8tqco0",
-                                                    "created": 1638050534970,
-                                                    "text": "allocates a chunk for bookkeeping"
-                                                },
-                                                "children": [
-                                                    {
-                                                        "data": {
-                                                            "id": "cg0wgmlpyjs0",
-                                                            "created": 1638050559694,
-                                                            "text": "contains counters and links to linked lists"
-                                                        },
-                                                        "children": []
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cg1pxn5k5sw0",
-                                                    "created": 1638133705272,
-                                                    "text": "max 0x410 bytes"
-                                                },
-                                                "children": []
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "data": {
-                                            "id": "cfein093d000",
-                                            "created": 1635777245005,
-                                            "text": "fastbin",
-                                            "layout": null
-                                        },
-                                        "children": [
-                                            {
-                                                "data": {
-                                                    "id": "cfeinmm7kao0",
-                                                    "created": 1635777293687,
-                                                    "text": "size bins range from 0x20 to 0x80",
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfh8zjm84v40",
-                                                    "created": 1636054696299,
-                                                    "text": "max bin size is defined by a `global_max_fast` variable in libc"
-                                                },
-                                                "children": [
-                                                    {
-                                                        "data": {
-                                                            "id": "cfh8zt3ce2g0",
-                                                            "created": 1636054716925,
-                                                            "text": "gdb: x/gx &global_max_fast"
-                                                        },
-                                                        "children": []
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "data": {
-                                            "id": "cfeio59ois00",
-                                            "created": 1635777334289,
-                                            "text": "main_arena",
-                                            "expandState": "expand",
-                                            "layout": null
-                                        },
-                                        "children": [
-                                            {
-                                                "data": {
-                                                    "id": "cfeiofc6yhs0",
-                                                    "created": 1635777356208,
-                                                    "text": "default place where memory is allocated",
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfeiokx42dk0",
-                                                    "created": 1635777368357,
-                                                    "text": "once freed, will hold an address of the main_arena",
-                                                    "background": "#92d050",
-                                                    "expandState": "expand",
-                                                    "layout_left_offset": {
-                                                        "x": -8.74999986961484,
-                                                        "y": 61.24999908730388
-                                                    },
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfeiphpmczk0",
-                                                    "created": 1635777439738,
-                                                    "text": "contains different bins for when tcache/fastbin are already full",
-                                                    "layout_left_offset": {
-                                                        "x": -4.999999925494194,
-                                                        "y": -52.49999921768904
-                                                    },
-                                                    "layout": null
-                                                },
-                                                "children": []
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "data": {
-                                            "id": "cfh9o1p87hc0",
-                                            "created": 1636056616402,
-                                            "text": "tips"
-                                        },
-                                        "children": [
-                                            {
-                                                "data": {
-                                                    "id": "cfh9o3er7eo0",
-                                                    "created": 1636056620123,
-                                                    "text": "When hesitating about which address is used to create another chunk, put invalid values (e.g. aaaaaa, bbbbbb) and see which will cause a crash"
-                                                },
-                                                "children": []
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "data": {
-                                            "id": "cfmeftjo63k0",
-                                            "created": 1636577877072,
-                                            "text": "unsorted bin"
-                                        },
-                                        "children": [
-                                            {
-                                                "data": {
-                                                    "id": "cfmegbgxf8o0",
-                                                    "created": 1636577916088,
-                                                    "text": "freed chunks that cannot go into fastbin/tcache will first go into this one"
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cfmegqkyyq00",
-                                                    "created": 1636577948984,
-                                                    "text": "upon allocation, libc will check if there is an usable chunk in unsorted bin"
-                                                },
-                                                "children": [
-                                                    {
-                                                        "data": {
-                                                            "id": "cfmehl6injc0",
-                                                            "created": 1636578015590,
-                                                            "text": "the unused ones will go into small or large bin according to their size"
-                                                        },
-                                                        "children": []
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "data": {
-                                            "id": "cg3fe5an3880",
-                                            "created": 1638307086292,
-                                            "text": "Houses"
-                                        },
-                                        "children": [
-                                            {
-                                                "data": {
-                                                    "id": "cg3feb6w63s0",
-                                                    "created": 1638307099126,
-                                                    "text": "exploits built on top of bugs (e.g. UAF, double free, overflow, ...)"
-                                                },
-                                                "children": []
-                                            },
-                                            {
-                                                "data": {
-                                                    "id": "cg3fezpfrh40",
-                                                    "created": 1638307152490,
-                                                    "text": "Spirit"
-                                                },
-                                                "children": [
-                                                    {
-                                                        "data": {
-                                                            "id": "cg3ff2jw6g80",
-                                                            "created": 1638307158685,
-                                                            "text": "have fake chunks that pass size tests"
-                                                        },
-                                                        "children": [
-                                                            {
-                                                                "data": {
-                                                                    "id": "cg3fh81o2wg0",
-                                                                    "created": 1638307327373,
-                                                                    "text": "16.04: fastbin. following chunk need to have legit size too"
-                                                                },
-                                                                "children": []
-                                                            },
-                                                            {
-                                                                "data": {
-                                                                    "id": "cg3fhl7dteo0",
-                                                                    "created": 1638307356016,
-                                                                    "text": "20.04: tcache don't check size, only initial fake chunk is needed"
-                                                                },
-                                                                "children": []
-                                                            }
-                                                        ]
-                                                    },
-                                                    {
-                                                        "data": {
-                                                            "id": "cg3ffynrfjk0",
-                                                            "created": 1638307228576,
-                                                            "text": "free fake chunk with valid size header"
-                                                        },
-                                                        "children": []
-                                                    },
-                                                    {
-                                                        "data": {
-                                                            "id": "cg3fg92bvh40",
-                                                            "created": 1638307251225,
-                                                            "text": "malloc fake chunk to get write access",
-                                                            "background": "#92d050"
-                                                        },
-                                                        "children": []
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
                             {
                                 "data": {
                                     "id": "cfeilndxptk0",
@@ -1128,6 +834,562 @@
                                     "text": "replace linker with an older one, which will links to older libc"
                                 },
                                 "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cfeijmykf0o0",
+                            "created": 1635776980978,
+                            "text": "heap",
+                            "layout": null
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cfh9o1p87hc0",
+                                    "created": 1636056616402,
+                                    "text": "tips"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cfh9o3er7eo0",
+                                            "created": 1636056620123,
+                                            "text": "When hesitating about which address is used to create another chunk, put invalid values (e.g. aaaaaa, bbbbbb) and see which will cause a crash"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cg3fe5an3880",
+                                    "created": 1638307086292,
+                                    "text": "Houses"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cg3feb6w63s0",
+                                            "created": 1638307099126,
+                                            "text": "exploits built on top of bugs (e.g. UAF, double free, overflow, ...)"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cg3fezpfrh40",
+                                            "created": 1638307152490,
+                                            "text": "Spirit"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cg3ff2jw6g80",
+                                                    "created": 1638307158685,
+                                                    "text": "have fake chunks that pass size tests"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cg3fh81o2wg0",
+                                                            "created": 1638307327373,
+                                                            "text": "16.04: fastbin. following chunk need to have legit size too"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cg3fhl7dteo0",
+                                                            "created": 1638307356016,
+                                                            "text": "20.04: tcache don't check size, only initial fake chunk is needed"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg3ffynrfjk0",
+                                                    "created": 1638307228576,
+                                                    "text": "free fake chunk with valid size header"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg3fg92bvh40",
+                                                    "created": 1638307251225,
+                                                    "text": "malloc fake chunk to get write access",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cg6ov4c4sqo0",
+                                            "created": 1638638486255,
+                                            "text": "Lore"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cg6ov5wvxbs0",
+                                                    "created": 1638638489687,
+                                                    "text": "leverage small bin to create fake chunk out of the heap"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg6ovlxc9ao0",
+                                                    "created": 1638638524543,
+                                                    "text": "Create correct looking list information for chunks"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cg6ovwrhwls0",
+                                                            "created": 1638638548134,
+                                                            "text": "Can work with only links in memory chunks"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cg6ow2xtl5s0",
+                                                            "created": 1638638561577,
+                                                            "text": "Or might need crafted freelist for later libc version"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg6owf4k2140",
+                                                    "created": 1638638588106,
+                                                    "text": "Re-allocate corrupted chunk that points to fake chunk in stack"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg6owudifg00",
+                                                    "created": 1638638621299,
+                                                    "text": "Allocate fake chunk to have write out of heap",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cg6su2q88u00",
+                                            "created": 1638649688830,
+                                            "text": "Force"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cg6su4dnzew0",
+                                                    "created": 1638649692424,
+                                                    "text": "Overwrite top chunk size so we can malloc BIG chunks without mmap"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgd6dgjgeu80",
+                                                            "created": 1639297241983,
+                                                            "text": "top chunk is also called \"Wilderness\""
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg6sulzly740",
+                                                    "created": 1638649730756,
+                                                    "text": "Then malloc a BIG chunk that stops just before our target"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg6suvz5wc00",
+                                                    "created": 1638649752497,
+                                                    "text": "Finally, malloc again to have a chunk on the target",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cg6sv5t0dds0",
+                                                    "created": 1638649773892,
+                                                    "text": "usable for libc up to 2.27 (included)"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgcrqj70f800",
+                                            "created": 1639255949846,
+                                            "text": "Einherjar"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cgcrqm0r54g0",
+                                                    "created": 1639255955998,
+                                                    "text": "Old norse for fighter that fights on one on one"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgcsrk9upls0",
+                                                            "created": 1639258851669,
+                                                            "text": "because we only need to overwrite one byte, i.e. prev_inuse flag"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgcsp84n6880",
+                                                    "created": 1639258668504,
+                                                    "text": "it revolves around overwriting chunk metadata in order to consolidate a fake chunk"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgcsq1ioo080",
+                                                    "created": 1639258732480,
+                                                    "text": "the consolidated chunk will contain a valid (freed) chunk, which fd pointer will be overwritten"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgcsqw79leo0",
+                                                    "created": 1639258799270,
+                                                    "text": "allocating this overwritten chunk will give us write access !",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgd6feo6t5k0",
+                                            "created": 1639297394644,
+                                            "text": "Orange"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cgd6fg716f40",
+                                                    "created": 1639297397960,
+                                                    "text": "Corruption of the top chunk"
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgd6gaga3oo0",
+                                                    "created": 1639297463823,
+                                                    "text": "valid up to libc2.23"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgd7x2bm1s80",
+                                                            "created": 1639301599427,
+                                                            "text": "even that is doubtful, example not working on 16.04 VM, patch backported ?"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgd7xj40ikw0",
+                                                    "created": 1639301635973,
+                                                    "text": "Seems to play with how heap memory is allocates on pages, and overwrites links between pages"
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "id": "cgkvt2ajt9c0",
+                                    "created": 1640079912240,
+                                    "text": "Bin assignment",
+                                    "expandState": "expand"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cgkvtru85nk0",
+                                            "created": 1640079967850,
+                                            "text": "less than threshold"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cgkvtycweuw0",
+                                                    "created": 1640079982040,
+                                                    "text": "before tcache (threshold: 0x80)",
+                                                    "expandState": "expand"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cfein093d000",
+                                                            "created": 1635777245005,
+                                                            "text": "fastbin",
+                                                            "layout": null
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfeinmm7kao0",
+                                                                    "created": 1635777293687,
+                                                                    "text": "size bins range from 0x20 to 0x80",
+                                                                    "layout": null
+                                                                },
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfh8zjm84v40",
+                                                                    "created": 1636054696299,
+                                                                    "text": "max bin size is defined by a `global_max_fast` variable in libc"
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "data": {
+                                                                            "id": "cfh8zt3ce2g0",
+                                                                            "created": 1636054716925,
+                                                                            "text": "gdb: x/gx &global_max_fast"
+                                                                        },
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgkvu6f4szk0",
+                                                    "created": 1640079999589,
+                                                    "text": "after tcache (threshold: 0x410)",
+                                                    "expandState": "expand"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cfeijsy53oo0",
+                                                            "created": 1635776994013,
+                                                            "text": "tcache",
+                                                            "layout": null
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfeijunn3qw0",
+                                                                    "created": 1635776997731,
+                                                                    "text": "thread cache",
+                                                                    "layout": null
+                                                                },
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfeijzspec00",
+                                                                    "created": 1635777008922,
+                                                                    "text": "16 slots (for different sizes)",
+                                                                    "layout": null
+                                                                },
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfeikb5n91c0",
+                                                                    "created": 1635777033649,
+                                                                    "text": "up to 7 memory chunks per slot",
+                                                                    "layout": null
+                                                                },
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfeiksnb6ts0",
+                                                                    "created": 1635777071722,
+                                                                    "text": "if full, go to other bins",
+                                                                    "layout": null
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "data": {
+                                                                            "id": "cfeil5q8yk00",
+                                                                            "created": 1635777100198,
+                                                                            "text": "for fastbin attacks or other, fill tcache first",
+                                                                            "background": "#92d050",
+                                                                            "layout": null
+                                                                        },
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cg0wgb8tqco0",
+                                                                    "created": 1638050534970,
+                                                                    "text": "allocates a chunk for bookkeeping"
+                                                                },
+                                                                "children": [
+                                                                    {
+                                                                        "data": {
+                                                                            "id": "cg0wgmlpyjs0",
+                                                                            "created": 1638050559694,
+                                                                            "text": "contains counters and links to linked lists"
+                                                                        },
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cg1pxn5k5sw0",
+                                                                    "created": 1638133705272,
+                                                                    "text": "max 0x410 bytes"
+                                                                },
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgkvvomkkv40",
+                                            "created": 1640080117585,
+                                            "text": "more than threshold",
+                                            "expandState": "expand"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfmeftjo63k0",
+                                                    "created": 1636577877072,
+                                                    "text": "unsorted bin"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cfmegbgxf8o0",
+                                                            "created": 1636577916088,
+                                                            "text": "freed chunks that cannot go into fastbin/tcache will first go into this one"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cfmegqkyyq00",
+                                                            "created": 1636577948984,
+                                                            "text": "upon allocation, libc will check if there is an usable chunk in unsorted bin"
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "data": {
+                                                                    "id": "cfmehl6injc0",
+                                                                    "created": 1636578015590,
+                                                                    "text": "the unused ones will go into small or large bin according to their size"
+                                                                },
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cgkvx7ungqg0",
+                                                            "created": 1640080237797,
+                                                            "text": "linked list pointers to main_arena, nice to leak !",
+                                                            "background": "#92d050"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cfeio59ois00",
+                                            "created": 1635777334289,
+                                            "text": "main_arena",
+                                            "expandState": "expand",
+                                            "layout": null
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cfeiofc6yhs0",
+                                                    "created": 1635777356208,
+                                                    "text": "default place where memory is allocated",
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeiokx42dk0",
+                                                    "created": 1635777368357,
+                                                    "text": "once freed, will hold an address of the main_arena",
+                                                    "background": "#92d050",
+                                                    "expandState": "expand",
+                                                    "layout_left_offset": {
+                                                        "x": -8.74999986961484,
+                                                        "y": 61.24999908730388
+                                                    },
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cfeiphpmczk0",
+                                                    "created": 1635777439738,
+                                                    "text": "contains different bins for when tcache/fastbin are already full",
+                                                    "layout_left_offset": {
+                                                        "x": -4.999999925494194,
+                                                        "y": -52.49999921768904
+                                                    },
+                                                    "layout": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }
