@@ -1394,6 +1394,51 @@
                         ]
                     }
                 ]
+            },
+            {
+                "data": {
+                    "id": "cgm3nhbka880",
+                    "created": 1640203603604,
+                    "text": "tips"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cgm3njkscvk0",
+                            "created": 1640203608516,
+                            "text": "null byte overflow with heap ? probably overwrite `prev_inuse`",
+                            "background": "#92d050"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cgm3nuzeiko0",
+                            "created": 1640203633344,
+                            "text": "when calling `delete`, be sure the memory layout look legit",
+                            "background": "#92d050"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cgm3qlefqh40",
+                            "created": 1640203847578,
+                            "text": "forgotten chunk: chunk that is considered as consolidated, but to which we still have access",
+                            "background": "#92d050"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cgm3r92d2n40",
+                            "created": 1640203899091,
+                            "text": "fake chunk: forget chunk which size tests seems legit",
+                            "background": "#92d050"
+                        },
+                        "children": []
+                    }
+                ]
             }
         ]
     },

@@ -246,3 +246,99 @@ constraints:
 To do so we will spawn a fake chunk that upon allocation will give us write access on the got entry.
 
 One question I have tho is: what if we just write the pointer to got's entry as a normal payload and try to access it with the rename_alien utility ? It will probably not work since the `rename_alien` method works relative to .bss, so we need to be able to write a pointer to the victim got in this region.
+
+## Conclusion
+
+This one took me a bit of time since I first tried to do it with libc2.31, so the analysis was not straightforward. Also, `strtoul` tricked me into thinking I can only use positive indexes to overwrite data, while I could give it negative numbers.
+
+# Traveller
+
+```bash
+❯ file traveller
+traveller: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=b551cbb805a21e18393c3816ffd28dfb11b1ff1e, with debug_info, not stripped
+❯ checksec traveller
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x400000)
+```
+
+The executable seems to be a classic create/delete/modify utility in heap exercises. Only, the sizes we can use when creating an entry seems to be predefined.
+
+Also, it is the kind of exercise where you need to call a `print flag` method.
+
+## Analysis
+
+We seel to have some global structures `tIndex` and `trips`:
+```
+                        tIndex
+006020bc 00 00 00 00     int        0h
+                        trips
+006020c0 00 00 00        trip *[7]
+            00 00 00 
+            00 00 00 
+    006020c0 00 00 00 00 00  trip *    00000000                [0]
+            00 00 00
+    006020c8 00 00 00 00 00  trip *    00000000                [1]
+            00 00 00
+    006020d0 00 00 00 00 00  trip *    00000000                [2]
+            00 00 00
+    006020d8 00 00 00 00 00  trip *    00000000                [3]
+            00 00 00
+    006020e0 00 00 00 00 00  trip *    00000000                [4]
+            00 00 00
+    006020e8 00 00 00 00 00  trip *    00000000                [5]
+            00 00 00
+    006020f0 00 00 00 00 00  trip *    00000000                [6]
+            00 00 00
+```
+
+It even seems that we have the `trip`'s object structure. A trip is composed of a destination (a array of char) and a distance. Distance seems to be the length of the char array, so it might be fun if we can overwrite it ;)
+
+When we give an index to modify, there seems to be no lower bound checks, i.e. we can give -1.
+
+Upon launch it even gives us a stack leak:
+```bash
+Hello! Welcome to trip management system. 
+0x7ffdf2faa81c 
+```
+
+When changing an entry, it seems we have a null byte overflow, so we can probably overwrite a `prev_inuse` byte or something like that.
+
+Looking at the way memory is allocated, we can see that it is mixing 0x20 chunks (trip object) with the size of the destination. So we are going to need to allocate some trips before freeing them so we have a stock of 0x20 to allocate without having them between big chunks.
+
+The `0x128` chunk seems to be the key, since we will be able to overwrite a null byte over the next chunk's header. The best candidate as a neighboor seems to be 0x200, since we won't overwrite size information.
+
+So it will be an exploit where we make libc forget about a chunk by overwriting `prev_inuse` and faking a valid looking memory layout. The forgotten chunk will allow us to leak a libc address (in the form of main_arena), then give us write access to a got entry or a symbol.
+
+## Exploit
+
+About the one_gadget:
+```
+x45216 execve("/bin/sh", rsp+0x30, environ)
+constraints:
+  rax == NULL
+
+0x4526a execve("/bin/sh", rsp+0x30, environ)
+constraints:
+  [rsp+0x30] == NULL
+
+0xf02a4 execve("/bin/sh", rsp+0x50, environ)
+constraints:
+  [rsp+0x50] == NULL
+
+0xf1147 execve("/bin/sh", rsp+0x70, environ)
+constraints:
+  [rsp+0x70] == NULL
+```
+
+The exploit itself is quite similar to the previous exercise. We overwrite a `prev_inuse` bit, setup the memory so it looks legit, then delete the overwritten chunk to trigger a consolidation. This consolidate memory region will contain a forgotten chunk to which we still have access.
+
+Then, by allocating memory up to the forgotten chunk, we will be able to first leak a main_arena address. The rest is a bit different, since we are going to allocate a trip on the same place as the forgotten chunk, since its first field is a pointer to a string which we can overwrite. We can then overwrite said string pointer with __malloc_hook's address, and put a gadget there.
+
+Or so I thought ! Instead, I remembered we have a nice `cat_flag` method, so we can just write this one at `__malloc_hook` instead (and we don't have to care about the conditions of the gadget !). And it just works ^^ (but I guess the gadget would have worked just fine too ^^)
+
+## Conclusion
+
+This one was quite fun. Maybe it's because I did a similar exercise just before, but it seemed straightforward. The most difficult part of this exercise was the heap grooming, where I had to try different combination of chunk size so that a memory chunk allocate for a trip coincides with my forgotten chunk. I was even able to align it all once, only to see the executable telling me "no more trips, ciao !".
