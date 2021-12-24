@@ -369,7 +369,212 @@
                             "text": "stack",
                             "layout": null
                         },
-                        "children": []
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cgnih8xvxcw0",
+                                    "created": 1640346991783,
+                                    "text": "ROP"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cgniha201bs0",
+                                            "created": 1640346994209,
+                                            "text": "Return Oriented Programming"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgniktp78bk0",
+                                            "created": 1640347272063,
+                                            "text": "change the execution flow to execute a gadget"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cgnil5g3wqg0",
+                                                    "created": 1640347297635,
+                                                    "text": "`ROPgadget --binary <binary>`: gadgets for unique aciton"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnj1spvk9c0",
+                                                            "created": 1640348602118,
+                                                            "text": "e.g. set register, syscall"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgnj1yq86280",
+                                                    "created": 1640348615200,
+                                                    "text": "`one_gadget <binary>`: single gadget that pop a shell"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnj2gyda0g0",
+                                                            "created": 1640348654874,
+                                                            "text": "have some conditions for registers"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgnikcuw7go0",
+                                            "created": 1640347235402,
+                                            "text": "stack is executable"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cgnikqvfmhs0",
+                                                    "created": 1640347265910,
+                                                    "text": "put gadget(s) at return address",
+                                                    "background": "#92d050"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnj8s2hvsw0",
+                                                            "created": 1640349149254,
+                                                            "text": "pop shell gadget"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnj8zfimc80",
+                                                            "created": 1640349165278,
+                                                            "text": "ret to another controlled part of program"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgnj3ur62hc0",
+                                            "created": 1640348763278,
+                                            "text": "stack is not executable (NX)",
+                                            "expandState": "expand"
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "id": "cgnigrhczyw0",
+                                                    "created": 1640346953779,
+                                                    "text": "return address",
+                                                    "expandState": "expand"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnifs0fmhc0",
+                                                            "created": 1640346876568,
+                                                            "text": "overwrite the return pointer on the stack",
+                                                            "background": "#92d050"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnig1wizio0",
+                                                            "created": 1640346898100,
+                                                            "text": "need to overcome canary"
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "data": {
+                                                                    "id": "cgnig4tfe6o0",
+                                                                    "created": 1640346904443,
+                                                                    "text": "leak it beforehand"
+                                                                },
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnigao8cm00",
+                                                            "created": 1640346917189,
+                                                            "text": "stack must be writable",
+                                                            "layout_right_offset": {
+                                                                "x": 84,
+                                                                "y": -21
+                                                            }
+                                                        },
+                                                        "children": [
+                                                            {
+                                                                "data": {
+                                                                    "id": "cgnighqhnd40",
+                                                                    "created": 1640346932563,
+                                                                    "text": "check with `vmmap` in gdb"
+                                                                },
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "data": {
+                                                                    "id": "cgnigms49s80",
+                                                                    "created": 1640346943545,
+                                                                    "text": "change the right with syscall"
+                                                                },
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnj6snore00",
+                                                            "created": 1640348993807,
+                                                            "text": "might need to overwrite just the last byte"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "id": "cgnja4okec00",
+                                                    "created": 1640349255074,
+                                                    "text": "stack frame"
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnjamq42400",
+                                                            "created": 1640349294350,
+                                                            "text": "setup all registers used in a return to change execution flow",
+                                                            "background": "#92d050"
+                                                        },
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "id": "cgnja69wzq80",
+                                                            "created": 1640349258541,
+                                                            "text": "pwn provides SigreturnFrame"
+                                                        },
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         "data": {
@@ -724,6 +929,40 @@
                                     "created": 1635785014850,
                                     "text": "shellcode: put hex code that will pop a shell at the return address in an executable stack",
                                     "background": "#92d050"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "id": "cgnjcko5pvk0",
+                            "created": 1640349446606,
+                            "text": "z3"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cgnjcqx6n340",
+                                    "created": 1640349460212,
+                                    "text": "use a solver to find obfuscated values",
+                                    "background": "#92d050"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cgnjdbj7als0",
+                                    "created": 1640349505079,
+                                    "text": "made by microsoft"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cgnjdgiuh880",
+                                    "created": 1640349515942,
+                                    "text": "setup constraints and let z3 find possible solutions"
                                 },
                                 "children": []
                             }
@@ -1404,39 +1643,84 @@
                 "children": [
                     {
                         "data": {
-                            "id": "cgm3njkscvk0",
-                            "created": 1640203608516,
-                            "text": "null byte overflow with heap ? probably overwrite `prev_inuse`",
-                            "background": "#92d050"
+                            "id": "cgnie2bsb3c0",
+                            "created": 1640346742294,
+                            "text": "heap",
+                            "expandState": "expand"
                         },
-                        "children": []
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cgm3r92d2n40",
+                                    "created": 1640203899091,
+                                    "text": "fake chunk: forget chunk which size tests seems legit",
+                                    "background": "#92d050"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cgm3qlefqh40",
+                                    "created": 1640203847578,
+                                    "text": "forgotten chunk: chunk that is considered as consolidated, but to which we still have access",
+                                    "background": "#92d050"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cgm3nuzeiko0",
+                                    "created": 1640203633344,
+                                    "text": "when calling `delete`, be sure the memory layout look legit",
+                                    "background": "#92d050"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "id": "cgm3njkscvk0",
+                                    "created": 1640203608516,
+                                    "text": "null byte overflow with heap ? probably overwrite `prev_inuse`",
+                                    "background": "#92d050"
+                                },
+                                "children": []
+                            }
+                        ]
                     },
                     {
                         "data": {
-                            "id": "cgm3nuzeiko0",
-                            "created": 1640203633344,
-                            "text": "when calling `delete`, be sure the memory layout look legit",
-                            "background": "#92d050"
+                            "id": "cgnie8jm3mg0",
+                            "created": 1640346755828,
+                            "text": "stack"
                         },
-                        "children": []
-                    },
-                    {
-                        "data": {
-                            "id": "cgm3qlefqh40",
-                            "created": 1640203847578,
-                            "text": "forgotten chunk: chunk that is considered as consolidated, but to which we still have access",
-                            "background": "#92d050"
-                        },
-                        "children": []
-                    },
-                    {
-                        "data": {
-                            "id": "cgm3r92d2n40",
-                            "created": 1640203899091,
-                            "text": "fake chunk: forget chunk which size tests seems legit",
-                            "background": "#92d050"
-                        },
-                        "children": []
+                        "children": [
+                            {
+                                "data": {
+                                    "id": "cgniee4w9ts0",
+                                    "created": 1640346767999,
+                                    "text": "for overflow check buffer location and eip",
+                                    "background": "#92d050"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "id": "cgniepi8vsw0",
+                                            "created": 1640346792751,
+                                            "text": "eip: type `i f` in gdb"
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "data": {
+                                            "id": "cgnif1asbvc0",
+                                            "created": 1640346818421,
+                                            "text": "payload = junk * (eip - buffer) + return_addr"
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
