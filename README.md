@@ -16,3 +16,5 @@ Ideas list:
 * learn better [vim](https://thevaluable.dev/vim-advanced/)
 * [generating function course](https://fr.coursera.org/learn/analysis-of-algorithms#syllabus)
 * [ray tracing](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+  * [on cuda (nvidia)](https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/)
+  * [in rust](https://blog.singleton.io/posts/2022-01-02-raytracing-with-rust/)
