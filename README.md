@@ -1,6 +1,6 @@
-# Art of programming
+# Programming Toolbox
 
-This is a repo to have fun with Donald Knuth's "The Art of Computer Programming" book (mainly implement some toy examples).
+Initially, this was a repo to have fun with Donald Knuth's "The Art of Computer Programming" book (mainly implement some toy examples). Then it expanded into a registry of several learning projects, which list can be seen below.
 
 Done:
 * Implement algo from Knuth's book
@@ -15,3 +15,4 @@ Ideas list:
 * [inline caching](https://bernsteinbear.com/blog/inline-caching-quickening/)
 * learn better [vim](https://thevaluable.dev/vim-advanced/)
 * [generating function course](https://fr.coursera.org/learn/analysis-of-algorithms#syllabus)
+* [ray tracing](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
