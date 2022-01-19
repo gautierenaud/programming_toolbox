@@ -3,16 +3,16 @@
 
 using namespace std;
 
-constexpr int matricLength = 1000;
+constexpr int matrixLength = 1000;
 
-static double sumRowColMatrix(const ulong matrix[matricLength][matricLength])
+static double sumRowColMatrix(const ulong matrix[matrixLength][matrixLength])
 {
 	auto start = chrono::high_resolution_clock::now();
 
 	ulong sum = 0;
-	for (size_t i = 0; i < matricLength; ++i)
+	for (size_t i = 0; i < matrixLength; ++i)
 	{
-		for (size_t j = 0; j < matricLength; ++j)
+		for (size_t j = 0; j < matrixLength; ++j)
 		{
 			sum += matrix[i][j];
 		}
@@ -24,14 +24,14 @@ static double sumRowColMatrix(const ulong matrix[matricLength][matricLength])
 	return elapsed.count();
 }
 
-static double sumColRowMatrix(const ulong matrix[matricLength][matricLength])
+static double sumColRowMatrix(const ulong matrix[matrixLength][matrixLength])
 {
 	auto start = chrono::high_resolution_clock::now();
 
 	ulong sum = 0;
-	for (size_t i = 0; i < matricLength; ++i)
+	for (size_t i = 0; i < matrixLength; ++i)
 	{
-		for (size_t j = 0; j < matricLength; ++j)
+		for (size_t j = 0; j < matrixLength; ++j)
 		{
 			sum += matrix[j][i];
 		}
@@ -45,12 +45,12 @@ static double sumColRowMatrix(const ulong matrix[matricLength][matricLength])
 
 static void compareSpeed(const int loopNum)
 {
-	ulong matrix[matricLength][matricLength];
-	for (size_t i = 0; i < matricLength; ++i)
+	ulong matrix[matrixLength][matrixLength];
+	for (size_t i = 0; i < matrixLength; ++i)
 	{
-		for (size_t j = 0; j < matricLength; ++j)
+		for (size_t j = 0; j < matrixLength; ++j)
 		{
-			matrix[i][j] = i + j * matricLength;
+			matrix[i][j] = i + j * matrixLength;
 		}
 	}
 
