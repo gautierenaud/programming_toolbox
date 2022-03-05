@@ -18,3 +18,4 @@ Ideas list:
 * [ray tracing](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
   * [on cuda (nvidia)](https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/)
   * [in rust](https://blog.singleton.io/posts/2022-01-02-raytracing-with-rust/)
+* [linux from scratch](https://linuxfromscratch.org/)
