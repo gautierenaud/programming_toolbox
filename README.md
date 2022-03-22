@@ -8,6 +8,7 @@ Done:
 * Explore instruction vectorization
 * Explore cache miss
 * Explore binaries: https://guyinatuxedo.github.io/
+* [linux from scratch](https://linuxfromscratch.org/)
 
 Ideas list:
 * take course for [performance](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-172-performance-engineering-of-software-systems-fall-2018/lecture-videos/index.htm)
@@ -18,4 +19,3 @@ Ideas list:
 * [ray tracing](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
   * [on cuda (nvidia)](https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/)
   * [in rust](https://blog.singleton.io/posts/2022-01-02-raytracing-with-rust/)
-* [linux from scratch](https://linuxfromscratch.org/)
