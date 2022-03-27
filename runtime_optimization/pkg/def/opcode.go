@@ -1,5 +1,7 @@
 package def
 
+import "fmt"
+
 type Opcode uint32
 
 const (
@@ -13,6 +15,15 @@ const (
 	HALT
 )
 
+func opToStr(op Opcode) string {
+	return map[Opcode]string{
+		ARG:   "arg",
+		ADD:   "add",
+		PRINT: "print",
+		HALT:  "halt",
+	}[op]
+}
+
 // Example of opcode:
 // 		byte bytecode[] = {	/*0:*/ ARG,   0,
 // 							/*2:*/ ARG,   1,
@@ -23,13 +34,22 @@ const (
 // This program takes its two arguments, adds them together, prints the result, and then halts the interpreter.
 
 type CachedValue struct {
-	Key ObjectType
-	// Value Method
+	Type  ObjectType
+	Value any
 }
 
 type Code struct {
 	// Array of `num_opcodes' (op, arg) pairs (total size `num_opcodes' * 2).
-	Bytecode   []byte
+	Bytecode   []CodeChunk
 	NumOpcodes uint32
-	Caches     []CachedValue
+	Caches     []*CachedValue
+}
+
+type CodeChunk struct {
+	Op  Opcode
+	Arg int
+}
+
+func (c CodeChunk) String() string {
+	return fmt.Sprintf("{Op: %s, Arg: %d}", opToStr(c.Op), c.Arg)
 }

@@ -3,6 +3,8 @@ package def
 import (
 	"errors"
 	"fmt"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var ErrObjectNotInt = errors.New("Object is not an integer type")
@@ -22,10 +24,16 @@ func (_ IntAdder) Add(right, left Object) (Object, error) {
 		return Object{}, ErrObjectNotInt
 	}
 
+	log.Debugf("right val: %d, left val: %d", intVal(right), intVal(left))
+
 	return Object{
 		Type:  TypeInt,
 		Value: intVal(right) + intVal(left),
 	}, nil
+}
+
+func (_ IntAdder) String() string {
+	return "IntAdder"
 }
 
 type IntPrinter struct{}
@@ -38,6 +46,10 @@ func (_ IntPrinter) Print(obj Object) error {
 	fmt.Println(obj.Value)
 
 	return nil
+}
+
+func (_ IntPrinter) String() string {
+	return "IntPrinter"
 }
 
 func objectIsInt(obj Object) bool {

@@ -25,6 +25,10 @@ func (_ StrAdder) Add(right, left Object) (Object, error) {
 	return Object{Type: TypeStr, Value: strVal(right) + strVal(left)}, nil
 }
 
+func (_ StrAdder) String() string {
+	return "StrAdder"
+}
+
 type StrPrinter struct{}
 
 func (_ StrPrinter) Print(obj Object) error {
@@ -35,6 +39,10 @@ func (_ StrPrinter) Print(obj Object) error {
 	fmt.Println(strVal(obj))
 
 	return nil
+}
+
+func (_ StrPrinter) String() string {
+	return "StrPrinter"
 }
 
 func objectIsStr(obj Object) bool {
