@@ -12,9 +12,21 @@ import (
 
 func main() {
 	logLevel := flag.String("log", "warn", "Set level of log. Possible values: debug, info, warn and fatal")
+	runtime := flag.String("runtime", "cached", "Select which runtime to use: cached, quickCached")
 	flag.Parse()
 
 	setLogLevel(*logLevel)
+
+	var eval func(frame *pkg.Frame)
+	switch *runtime {
+	case "cached":
+		eval = pkg.EvalCodeCached
+	case "quickCached":
+		eval = pkg.EvalCodeCachedQuick
+	default:
+		log.Infof("Could not find runtime for: %s, using \"cached\" as default", *runtime)
+		eval = pkg.EvalCodeCached
+	}
 
 	// basic code that will add 2 arguments and print it
 	bytecode := []def.CodeChunk{
@@ -32,16 +44,16 @@ func main() {
 	}
 
 	frame := pkg.NewFrame(10, bytecode, args)
-	pkg.EvalCodeUncached(&frame) // Should look for method
-	pkg.EvalCodeUncached(&frame) // Should use cached method
+	eval(&frame) // Should look for method
+	eval(&frame) // Should use cached method
 
 	// second case where each arg is a string
 	frame.SetArgs([]def.Object{
 		{Type: def.TypeStr, Value: "42"},
 		{Type: def.TypeStr, Value: "42"},
 	})
-	pkg.EvalCodeUncached(&frame) // Should look for method (entry in cache but with wrong type)
-	pkg.EvalCodeUncached(&frame) // Should use cached method
+	eval(&frame) // Should look for method (entry in cache but with wrong type)
+	eval(&frame) // Should use cached method
 }
 
 func setLogLevel(level string) {

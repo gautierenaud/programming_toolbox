@@ -9,18 +9,24 @@ const (
 	ARG Opcode = iota + 1
 	// Add stack[-2] + stack[-1].
 	ADD
+	// same as ADD, but specific to integer
+	ADD_INT
+	// same as ADD, but first tries to use cached value
+	ADD_CACHED
 	// Pop the top of the stack and print it.
 	PRINT
 	// Halt the machine.
 	HALT
 )
 
-func opToStr(op Opcode) string {
+func OpToStr(op Opcode) string {
 	return map[Opcode]string{
-		ARG:   "arg",
-		ADD:   "add",
-		PRINT: "print",
-		HALT:  "halt",
+		ARG:        "arg",
+		ADD:        "add",
+		ADD_INT:    "add_int",
+		ADD_CACHED: "add_cached",
+		PRINT:      "print",
+		HALT:       "halt",
 	}[op]
 }
 
@@ -47,9 +53,9 @@ type Code struct {
 
 type CodeChunk struct {
 	Op  Opcode
-	Arg int
+	Arg uint32
 }
 
 func (c CodeChunk) String() string {
-	return fmt.Sprintf("{Op: %s, Arg: %d}", opToStr(c.Op), c.Arg)
+	return fmt.Sprintf("{Op: %s, Arg: %d}", OpToStr(c.Op), c.Arg)
 }

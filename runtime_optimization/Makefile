@@ -1,3 +1,5 @@
+.PHONY: lint format tools vendor
+
 lint:
 	@golangci-lint run
 
